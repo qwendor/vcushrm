@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=Rock+Salt&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 
 <!-- ══════════════════════════════════════════════════════════════════════
      HOW TO CUSTOMIZE (everything lives in this one file)
@@ -1600,6 +1602,23 @@ const SAMPLE_MEMBERS = [
   { name:"Ava Bennett",      pts:8  }, { name:"Sam Torres",    pts:5  },
 ];
 
+/* ── LIVE SYNC (Firebase Realtime Database) ──────────────────────
+   With CLOUD.enabled=true, check-ins write to the shared database and
+   the leaderboard/tracker update live on every device. The config
+   below is safe to publish — access is controlled by the database's
+   security rules, not by these values. Set enabled:false to fall
+   back to per-device demo mode (localStorage).                     */
+const CLOUD = {
+  enabled: true,
+  firebase: {
+    apiKey: "AIzaSyCfqtMt4aR82uWwWxwS1OaCkzqiW3CB1LI",
+    authDomain: "vcushrm-5ec56.firebaseapp.com",
+    databaseURL: "https://vcushrm-5ec56-default-rtdb.firebaseio.com",
+    projectId: "vcushrm-5ec56",
+    appId: "1:302354197350:web:327242a8c421f8b5a5b6a7",
+  },
+};
+
 /* ════════════════════════════ HELPERS ════════════════════════════ */
 const $  = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -1618,6 +1637,39 @@ function esc(s){ const d = document.createElement("div"); d.textContent = s; ret
 $$(".club-name").forEach(el => el.textContent = CLUB.name);
 document.title = CLUB.name + " — " + CLUB.tagline;
 $("#yr").textContent = new Date().getFullYear();
+
+/* ════════════════════════════ LIVE SYNC INIT ════════════════════════════ */
+let db = null, LIVE = false, LIVE_MEMBERS = {}, MY_EMAIL = "";
+try { MY_EMAIL = localStorage.getItem("club_my_email") || ""; } catch(e){}
+const ekey = em => em.replace(/\./g, ",");
+if (CLOUD.enabled && typeof firebase !== "undefined") {
+  try {
+    firebase.initializeApp(CLOUD.firebase);
+    db = firebase.database();
+    LIVE = true;
+  } catch(e){ db = null; LIVE = false; }
+}
+if (LIVE) {
+  /* stream the whole member list — this is what makes the leaderboard live */
+  db.ref("members").on("value", snap => {
+    LIVE_MEMBERS = snap.val() || {};
+    if (currentRoute === "/leaderboard") renderBoard();
+    if (ckInited && currentRoute === "/check-in") refreshCkUI();
+  });
+  /* live-mode labels */
+  const foot = document.querySelector(".lb-foot p");
+  if (foot) foot.textContent = "live chapter standings ✦ updates in real time as members check in";
+  const rst = $("#lb-reset"); if (rst) rst.style.display = "none";
+  const hint = document.querySelector("#ck-form p.hint");
+  if (hint) hint.textContent = "Synced live ✦ your points count for the whole chapter — use the same email every time.";
+  const leg = document.querySelector(".lb-legend");
+  if (leg) {
+    const c = document.createElement("span");
+    c.className = "chip"; c.style.background = "var(--gold)";
+    c.innerHTML = '<span class="dot" style="background:var(--ink-deep)"></span>Live';
+    leg.prepend(c);
+  }
+}
 
 /* ════════════════════════════ LOADER ════════════════════════════ */
 window.addEventListener("load", () => {
@@ -1812,6 +1864,11 @@ function evById(id){ return EVENTS.find(e => e.id === id); }
 
 function memberRec(email){
   const key = email.trim().toLowerCase();
+  if (LIVE) {
+    const m = LIVE_MEMBERS[ekey(key)];
+    return m ? { name: m.name || "", email: key, pts: m.pts || 0, guests: m.guests || 0, guestPts: m.guestPts || 0, events: m.events || [] }
+             : { name:"", email:key, pts:0, guests:0, guestPts:0, events:[] };
+  }
   return store().members[key] || { name:"", email:key, pts:0, guests:0, guestPts:0, events:[] };
 }
 function ckSelected(){ return lockedEvent || evById($("#ck-event").value) || EVENTS[0]; }
@@ -1884,6 +1941,30 @@ function ckError(msg){
   const el = $("#ck-msg"); el.textContent = msg; el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 5200);
 }
+function showCkSuccess(ev, t, name, after, earned, gAllow, requested){
+  $("#ck-form").style.display = "none";
+  const s = $("#ck-success"); s.classList.add("show");
+  $("#sc-pts").textContent = "+" + earned;
+  $("#sc-title").textContent = "You're checked in, " + name.split(" ")[0] + "!";
+  const tier = tierOf(after.pts);
+  const gp = gAllow * GUEST_PTS;
+  let sub = ev.title + " · " + t.pts + " base pts";
+  if (gAllow > 0) sub += " + " + gp + " guest pts";
+  if (gAllow < requested) sub += " (" + (requested - gAllow) + " guest" + (requested - gAllow > 1 ? "s" : "") + " over the semester cap)";
+  $("#sc-sub").textContent = sub;
+  $("#sc-tier").innerHTML = '<span class="tier-pill ' + tierClass(tier) + '">✦ ' + tier + ' Member · ' + after.pts + ' pts</span>';
+  const next = tier === "General" ? 20 : tier === "Active" ? 30 : null;
+  const fill = $("#sc-fill");
+  fill.style.width = "0%";
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    fill.style.width = (next ? Math.min(100, after.pts / next * 100) : 100) + "%";
+  }));
+  $("#sc-next").textContent = next
+    ? (next - after.pts) + " more point" + (next - after.pts === 1 ? "" : "s") + " to " + (next === 20 ? "Active" : "Premium") + " status"
+    : "Top tier unlocked — you're Premium. ✦";
+  confetti();
+}
+
 function submitCheckin(e){
   e.preventDefault();
   const ev = ckSelected(), t = TYPES[ev.type];
@@ -1891,38 +1972,48 @@ function submitCheckin(e){
   if (!name) return ckError("Please enter your full name.");
   if (!/^\S+@\S+\.\S+$/.test(email)) return ckError("Please enter a valid email address.");
   if (ev.type === "coffee" && !$("#ck-verify").checked) return ckError("Coffee chats need e-board verification — check the box once a board member confirms.");
+  const requested = ckGuests;
+
+  if (LIVE) {
+    /* shared database: apply caps + duplicate check atomically on the server copy */
+    let result = null, dup = false;
+    db.ref("members/" + ekey(email)).transaction(cur => {
+      const m = cur || { name, email, pts: 0, guests: 0, guestPts: 0 };
+      const events = m.events || [];
+      if (ev.type !== "coffee" && events.includes(ev.id)) { dup = true; return; }
+      const gAllow = Math.max(0, Math.min(requested, MAX_GUESTS - (m.guests || 0), Math.floor((MAX_GUEST_PTS - (m.guestPts || 0)) / GUEST_PTS)));
+      const gp = gAllow * GUEST_PTS, earned = t.pts + gp;
+      result = { gAllow, earned };
+      return {
+        name, email,
+        pts: (m.pts || 0) + earned,
+        guests: (m.guests || 0) + gAllow,
+        guestPts: (m.guestPts || 0) + gp,
+        events: ev.type !== "coffee" ? events.concat(ev.id) : events,
+      };
+    }).then(res => {
+      if (dup) return ckError("You're already checked in for this event — points only count once. ✦");
+      if (!res.committed || !result) return ckError("Check-in didn't go through — please try again.");
+      db.ref("log").push({ ts: new Date().toISOString(), name, email, event: ev.title, type: t.label, base: t.pts, guests: result.gAllow, guestPts: result.gAllow * GUEST_PTS, total: result.earned });
+      try { localStorage.setItem("club_my_email", email); } catch(err){}
+      MY_EMAIL = email;
+      showCkSuccess(ev, t, name, res.snapshot.val(), result.earned, result.gAllow, requested);
+    }).catch(() => ckError("Couldn't reach the live database — check your connection and try again."));
+    return;
+  }
+
+  /* demo mode — saves to this browser only */
   const data = store();
-  const key = email;
-  const m = data.members[key] || { name, email: key, pts: 0, guests: 0, guestPts: 0, events: [] };
+  const m = data.members[email] || { name, email, pts: 0, guests: 0, guestPts: 0, events: [] };
   if (ev.type !== "coffee" && m.events.includes(ev.id)) return ckError("You're already checked in for this event — points only count once. ✦");
-  const gAllow = Math.max(0, Math.min(ckGuests, MAX_GUESTS - m.guests, Math.floor((MAX_GUEST_PTS - m.guestPts) / GUEST_PTS)));
+  const gAllow = Math.max(0, Math.min(requested, MAX_GUESTS - m.guests, Math.floor((MAX_GUEST_PTS - m.guestPts) / GUEST_PTS)));
   const gp = gAllow * GUEST_PTS, earned = t.pts + gp;
   m.name = name; m.pts += earned; m.guests += gAllow; m.guestPts += gp;
   if (ev.type !== "coffee") m.events.push(ev.id);
-  data.members[key] = m;
-  data.log.push({ ts: new Date().toISOString(), name, email: key, event: ev.title, type: t.label, base: t.pts, guests: gAllow, guestPts: gp, total: earned });
+  data.members[email] = m;
+  data.log.push({ ts: new Date().toISOString(), name, email, event: ev.title, type: t.label, base: t.pts, guests: gAllow, guestPts: gp, total: earned });
   save(data);
-  /* success UI */
-  $("#ck-form").style.display = "none";
-  const s = $("#ck-success"); s.classList.add("show");
-  $("#sc-pts").textContent = "+" + earned;
-  $("#sc-title").textContent = "You're checked in, " + name.split(" ")[0] + "!";
-  const tier = tierOf(m.pts);
-  let sub = ev.title + " · " + t.pts + " base pts";
-  if (gAllow > 0) sub += " + " + gp + " guest pts";
-  if (gAllow < ckGuests) sub += " (" + (ckGuests - gAllow) + " guest" + (ckGuests - gAllow > 1 ? "s" : "") + " over the semester cap)";
-  $("#sc-sub").textContent = sub;
-  $("#sc-tier").innerHTML = '<span class="tier-pill ' + tierClass(tier) + '">✦ ' + tier + ' Member · ' + m.pts + ' pts</span>';
-  const next = tier === "General" ? 20 : tier === "Active" ? 30 : null;
-  const fill = $("#sc-fill");
-  fill.style.width = "0%";
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    fill.style.width = (next ? Math.min(100, m.pts / next * 100) : 100) + "%";
-  }));
-  $("#sc-next").textContent = next
-    ? (next - m.pts) + " more point" + (next - m.pts === 1 ? "" : "s") + " to " + (next === 20 ? "Active" : "Premium") + " status"
-    : "Top tier unlocked — you're Premium. ✦";
-  confetti();
+  showCkSuccess(ev, t, name, m, earned, gAllow, requested);
 }
 
 /* ════════════════════════════ QR ════════════════════════════ */
@@ -1961,6 +2052,11 @@ function copyQRLink(){
 
 /* ════════════════════════════ LEADERBOARD ════════════════════════════ */
 function allMembers(){
+  if (LIVE) {
+    return Object.values(LIVE_MEMBERS)
+      .map(m => ({ name: m.name || m.email, pts: m.pts || 0, you: !!MY_EMAIL && m.email === MY_EMAIL }))
+      .sort((a, b) => b.pts - a.pts);
+  }
   const local = Object.values(store().members).map(m => ({ name: m.name, pts: m.pts, you: true }));
   const seedFiltered = SAMPLE_MEMBERS.filter(s => !local.some(l => l.name.toLowerCase() === s.name.toLowerCase()));
   return [...seedFiltered, ...local].sort((a, b) => b.pts - a.pts);
@@ -2019,14 +2115,17 @@ function renderBoard(){
 }
 $("#lb-search").addEventListener("input", renderBoard);
 $("#lb-csv").addEventListener("click", () => {
-  const log = store().log;
-  const head = "timestamp,name,email,event,type,base,guests,guest_pts,total\n";
-  const body = log.map(r => [r.ts, r.name, r.email, r.event, r.type, r.base, r.guests, r.guestPts, r.total]
-    .map(v => '"' + String(v).replace(/"/g, '""') + '"').join(",")).join("\n");
-  const blob = new Blob([head + body], { type: "text/csv" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = "checkins.csv"; a.click();
-  URL.revokeObjectURL(a.href);
+  const doCsv = log => {
+    const head = "timestamp,name,email,event,type,base,guests,guest_pts,total\n";
+    const body = log.map(r => [r.ts, r.name, r.email, r.event, r.type, r.base, r.guests, r.guestPts, r.total]
+      .map(v => '"' + String(v).replace(/"/g, '""') + '"').join(",")).join("\n");
+    const blob = new Blob([head + body], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "checkins.csv"; a.click();
+    URL.revokeObjectURL(a.href);
+  };
+  if (LIVE) { db.ref("log").once("value").then(s => doCsv(Object.values(s.val() || {}))); return; }
+  doCsv(store().log);
 });
 $("#lb-reset").addEventListener("click", () => {
   if (confirm("Clear all local check-ins and reset the demo leaderboard?")) {
@@ -2044,11 +2143,36 @@ function lookupMember(){
     empty.textContent = "Enter the email you use at check-in and we'll find you. ✦";
     empty.classList.add("show"); return;
   }
+  if (LIVE) {
+    empty.textContent = "Looking you up… ✦"; empty.classList.add("show");
+    Promise.all([db.ref("members/" + ekey(email)).once("value"), db.ref("log").once("value")])
+      .then(([ms, ls]) => {
+        empty.classList.remove("show");
+        const m = ms.val();
+        if (!m) {
+          empty.textContent = "No check-ins found for that email yet. Scan the QR at your next event — your points will show up here. ✦";
+          empty.classList.add("show"); return;
+        }
+        try { localStorage.setItem("club_my_email", email); } catch(e){}
+        MY_EMAIL = email;
+        renderTrack(email, m, Object.values(ls.val() || {}).filter(r => r.email === email));
+      })
+      .catch(() => {
+        empty.textContent = "Couldn't reach the live database — check your connection. ✦";
+        empty.classList.add("show");
+      });
+    return;
+  }
   const m = store().members[email];
   if (!m) {
     empty.textContent = "No check-ins found for that email on this device yet. Scan the QR at your next event — your points will show up here. ✦";
     empty.classList.add("show"); return;
   }
+  renderTrack(email, m, store().log.filter(r => r.email === email));
+}
+
+function renderTrack(email, m, hist){
+  const res = $("#track-result");
   const tier = tierOf(m.pts), next = tier === "General" ? 20 : tier === "Active" ? 30 : null;
   $("#tr-av").textContent = initials(m.name || email);
   $("#tr-name").textContent = m.name || email;
@@ -2057,8 +2181,7 @@ function lookupMember(){
   $("#tr-pts").textContent = m.pts;
   $("#tr-next").textContent = next ? (next - m.pts) : "MAX";
   $("#tr-next-l").textContent = next ? ("Pts to " + (next === 20 ? "Active" : "Premium")) : "Top tier reached";
-  $("#tr-guests").textContent = m.guests + "/4";
-  const hist = store().log.filter(r => r.email === email);
+  $("#tr-guests").textContent = (m.guests || 0) + "/4";
   $("#tr-hist").innerHTML = hist.map(r =>
     '<li><b>' + esc(r.event) + '</b><span class="pt">+' + r.total + ' pts</span></li>').join("");
   res.classList.add("show");
