@@ -195,10 +195,10 @@ section{position:relative;scroll-margin-top:104px}
 .brand:hover .mark{transform:rotate(-8deg) scale(1.06)}
 .brand-txt .nm{font-family:var(--serif);font-size:17px;letter-spacing:.02em;color:var(--ecru);line-height:1.1}
 .brand-txt .sub{font-size:8.5px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin-top:3px}
-.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links{display:flex;align-items:center;gap:21px}
 .nav-links a.lnk{
-  position:relative;font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
-  padding:6px 0;transition:color .3s;
+  position:relative;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+  padding:6px 0;transition:color .3s;white-space:nowrap;
 }
 .nav-links a.lnk::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1.5px;
   background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.22,1,.36,1)}
@@ -227,6 +227,8 @@ section{position:relative;scroll-margin-top:104px}
 .view{display:none}
 .view.active{display:block;animation:viewIn .6s cubic-bezier(.22,1,.36,1)}
 @keyframes viewIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* standalone tabs clear the fixed nav */
+.view:not([data-view="/"]) > .sec:first-child{padding-top:176px}
 
 /* ─────────────────────────── HERO ─────────────────────────── */
 #hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:150px 0 40px;overflow:clip}
@@ -453,6 +455,97 @@ section{position:relative;scroll-margin-top:104px}
 .step h4{font-family:var(--serif);font-style:italic;font-weight:500;font-size:21px;color:var(--ecru);margin-bottom:8px}
 .step p{color:var(--muted);font-size:14px}
 
+/* ─────────────────────────── WHAT IS SHRM ─────────────────────────── */
+.shrm-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+.shrm-copy p{color:var(--muted);font-size:16px;margin-bottom:18px}
+.shrm-copy p b{color:var(--ecru)}
+.affil{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(91,147,214,.4);border-radius:999px;
+  padding:9px 18px;font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-top:8px}
+.shrm-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.fact{border:1px solid var(--line);border-radius:var(--r-md);background:var(--card);padding:26px 24px 22px;
+  transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .35s;position:relative;overflow:hidden}
+.fact::before{content:"";position:absolute;inset:0;background:var(--pattern);background-size:200px;opacity:0;transition:opacity .4s}
+.fact:hover{transform:translateY(-6px);border-color:rgba(241,184,80,.4)}
+.fact:hover::before{opacity:.45}
+.fact .fv{font-family:var(--serif);font-size:34px;color:var(--gold);line-height:1;position:relative}
+.fact .fl{font-size:10.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px;position:relative}
+
+/* ─────────────────────────── MEMBERSHIP EXTRAS ─────────────────────────── */
+.app-cta{display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;
+  border:1px solid rgba(241,184,80,.4);border-radius:var(--r-lg);padding:30px 36px;margin-bottom:56px;
+  background:linear-gradient(140deg,rgba(241,184,80,.12),rgba(10,16,34,.8) 55%);position:relative;overflow:hidden}
+.app-cta::before{content:"";position:absolute;inset:0;background:var(--pattern);background-size:260px;opacity:.4;pointer-events:none}
+.app-cta .txt{position:relative}
+.app-cta .txt b{font-family:var(--serif);font-size:24px;color:var(--ecru);font-weight:600;display:block;margin-bottom:4px}
+.app-cta .txt span{color:var(--muted);font-size:14px}
+.app-cta .btns{display:flex;gap:14px;flex-wrap:wrap;position:relative}
+/* points tracker */
+.track-box{border:1px solid var(--line);border-radius:var(--r-lg);background:rgba(10,16,34,.75);padding:clamp(28px,4vw,44px);
+  margin-top:60px;position:relative;overflow:hidden}
+.track-box::before{content:"";position:absolute;inset:0;background:var(--pattern);background-size:260px;opacity:.3;pointer-events:none}
+.track-box > *{position:relative}
+.track-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.track-head .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:var(--gold);
+  background:linear-gradient(140deg,rgba(241,184,80,.16),rgba(185,165,227,.1));border:1px solid rgba(241,184,80,.35)}
+.track-head .ic svg{width:22px;height:22px}
+.track-head h3{font-size:26px;color:var(--ecru)}
+.track-sub{color:var(--muted);font-size:14.5px;margin-bottom:24px}
+.track-row{display:flex;gap:12px;flex-wrap:wrap}
+.track-row input{flex:1;min-width:220px;padding:15px 18px;border-radius:14px;border:1px solid var(--line);
+  background:rgba(7,11,24,.75);color:var(--ecru);font-family:inherit;font-size:15px;transition:border-color .3s,box-shadow .3s}
+.track-row input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(241,184,80,.14)}
+.track-result{display:none;margin-top:28px;border-top:1px solid var(--line-soft);padding-top:26px}
+.track-result.show{display:block;animation:viewIn .5s}
+.tr-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.tr-top .av{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:19px;
+  color:var(--ecru);background:linear-gradient(140deg,#1C2C52,#0D1329);border:1px solid var(--line)}
+.tr-top .nm b{display:block;font-family:var(--serif);font-size:22px;color:var(--ecru);font-weight:600}
+.tr-top .nm span{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.tr-top .tier-pill{margin-left:auto}
+.tr-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.tr-stat{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:rgba(241,236,225,.03)}
+.tr-stat .v{font-family:var(--serif);font-size:26px;color:var(--gold)}
+.tr-stat .l{font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.tr-hist{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.tr-hist li{display:flex;justify-content:space-between;gap:14px;font-size:13.5px;color:var(--muted);
+  border:1px solid var(--line-soft);border-radius:10px;padding:10px 15px;background:rgba(7,11,24,.4)}
+.tr-hist li b{color:var(--ecru);font-weight:600}
+.tr-hist li .pt{color:var(--gold);font-weight:800;white-space:nowrap}
+.track-empty{display:none;margin-top:24px;border:1px dashed var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted);font-size:14px}
+.track-empty.show{display:block;animation:viewIn .4s}
+
+/* ─────────────────────────── SOCIALS ─────────────────────────── */
+.soc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
+.soc{--acc:var(--gold);border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);padding:44px 34px 38px;
+  text-align:center;position:relative;overflow:hidden;transition:transform .5s cubic-bezier(.22,1,.36,1),border-color .4s,background .4s;display:block}
+.soc::before{content:"";position:absolute;inset:0;background:var(--pattern);background-size:240px;opacity:0;transition:opacity .5s}
+.soc:hover{transform:translateY(-9px);border-color:var(--acc);background:var(--card-hover)}
+.soc:hover::before{opacity:.4}
+.soc .ic{width:70px;height:70px;border-radius:50%;margin:0 auto 22px;display:grid;place-items:center;color:var(--acc);
+  border:1px solid var(--line);background:rgba(7,11,24,.6);transition:transform .5s cubic-bezier(.34,1.56,.64,1);position:relative}
+.soc:hover .ic{transform:scale(1.12) rotate(-6deg)}
+.soc .ic svg{width:30px;height:30px}
+.soc h3{font-size:24px;color:var(--ecru);margin-bottom:4px}
+.soc .hd{font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+.soc p{color:var(--muted);font-size:14px;margin-bottom:22px;position:relative}
+.soc .go{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ecru);border:1px solid var(--line);border-radius:999px;padding:10px 22px;transition:all .3s;position:relative}
+.soc:hover .go{border-color:var(--acc);color:var(--acc)}
+.soc .go svg{width:12px;height:12px}
+
+/* ─────────────────────────── CONTACT ─────────────────────────── */
+.ct-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-bottom:26px}
+.ct-card{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);padding:34px 30px;
+  transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .35s;display:block;position:relative;overflow:hidden}
+.ct-card:hover{transform:translateY(-7px);border-color:rgba(241,184,80,.4)}
+.ct-card .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;margin-bottom:20px;color:var(--gold);
+  background:linear-gradient(140deg,rgba(241,184,80,.15),rgba(185,165,227,.1));border:1px solid rgba(241,184,80,.3)}
+.ct-card .ic svg{width:23px;height:23px}
+.ct-card h3{font-size:21px;color:var(--ecru);margin-bottom:8px}
+.ct-card p{color:var(--muted);font-size:14px;margin-bottom:14px}
+.ct-card .lk{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:7px}
+.ct-card .lk svg{width:12px;height:12px}
+
 /* ─────────────────────────── JOIN ─────────────────────────── */
 #join .panel{
   position:relative;border:1px solid rgba(241,184,80,.35);border-radius:32px;overflow:hidden;
@@ -633,10 +726,14 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
 /* ─────────────────────────── RESPONSIVE ─────────────────────────── */
 @media (max-width:1020px){
   .pillars,.ev-grid,.team-grid,.tiers{grid-template-columns:repeat(2,1fr)}
-  .pts-wrap{grid-template-columns:1fr}
+  .pts-wrap,.shrm-grid{grid-template-columns:1fr}
+  .shrm-grid{gap:40px}
   .hero-stats{grid-template-columns:repeat(2,1fr)}
   .tm:nth-child(2),.tm:nth-child(5){transform:none}
   .tm:nth-child(2):hover,.tm:nth-child(5):hover{transform:translateY(-9px)}
+  .nav-links a.lnk{display:none}
+  .nav-links .nav-cta{display:inline-flex}
+  #burger{display:flex}
 }
 @media (max-width:760px){
   .nav-links{display:none}
@@ -697,11 +794,13 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
       </span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      <a class="lnk" href="#about">About</a>
-      <a class="lnk" href="#events">Events</a>
-      <a class="lnk" href="#team">Team</a>
-      <a class="lnk" href="#membership">Membership</a>
+      <a class="lnk" href="#/" data-route="/">About</a>
+      <a class="lnk" href="#/events" data-route="/events">Events</a>
+      <a class="lnk" href="#/membership" data-route="/membership">Membership</a>
+      <a class="lnk" href="#/eboard" data-route="/eboard">E-Board</a>
       <a class="lnk" href="#/leaderboard" data-route="/leaderboard">Leaderboard</a>
+      <a class="lnk" href="#/socials" data-route="/socials">Socials</a>
+      <a class="lnk" href="#/contact" data-route="/contact">Contact</a>
       <a class="btn btn-gold nav-cta" href="#/check-in" data-route="/check-in">Check In</a>
     </nav>
     <button id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -710,19 +809,19 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
 
 <!-- mobile menu -->
 <nav id="mmenu" aria-label="Mobile">
-  <a href="#about" style="transition-delay:.05s"><i>01</i>About</a>
-  <a href="#events" style="transition-delay:.1s"><i>02</i>Events</a>
-  <a href="#team" style="transition-delay:.15s"><i>03</i>Team</a>
-  <a href="#gallery" style="transition-delay:.2s"><i>04</i>Gallery</a>
-  <a href="#membership" style="transition-delay:.25s"><i>05</i>Membership</a>
-  <a href="#/leaderboard" style="transition-delay:.3s"><i>06</i>Leaderboard</a>
-  <a href="#/check-in" style="transition-delay:.35s"><i>07</i>Check In</a>
-  <a href="#join" style="transition-delay:.4s"><i>08</i>Join Us</a>
+  <a href="#/" style="transition-delay:.05s"><i>01</i>About</a>
+  <a href="#/events" style="transition-delay:.1s"><i>02</i>Events</a>
+  <a href="#/membership" style="transition-delay:.15s"><i>03</i>Membership</a>
+  <a href="#/eboard" style="transition-delay:.2s"><i>04</i>E-Board</a>
+  <a href="#/leaderboard" style="transition-delay:.25s"><i>05</i>Leaderboard</a>
+  <a href="#/socials" style="transition-delay:.3s"><i>06</i>Socials</a>
+  <a href="#/contact" style="transition-delay:.35s"><i>07</i>Contact</a>
+  <a href="#/check-in" style="transition-delay:.4s"><i>08</i>Check In</a>
 </nav>
 
 <main>
-<!-- ═══════════════════════════ HOME / ABOUT VIEW ═══════════════════════════ -->
-<section class="view active" id="view-home">
+<!-- ═══════════════════════════ ABOUT TAB (home) ═══════════════════════════ -->
+<section class="view active" data-view="/">
 
   <!-- HERO -->
   <section id="hero">
@@ -748,10 +847,10 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
         theory into real careers through workshops, mentors, and friendships that outlast graduation.
       </p>
       <div class="hero-ctas rv" style="--d:.24s">
-        <a class="btn btn-gold" href="#join">Become a Member
+        <a class="btn btn-gold" href="#/membership">Become a Member
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-ghost" href="#membership">The Points System</a>
-        <a class="quiet" href="#/leaderboard" data-route="/leaderboard">View leaderboard
+        <a class="btn btn-ghost" href="#/events">See the Events</a>
+        <a class="quiet" href="#/leaderboard">View leaderboard
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </div>
       <div class="hero-stats rv" style="--d:.34s">
@@ -808,12 +907,39 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
     </div>
   </section>
 
+  <!-- WHAT IS SHRM -->
+  <section class="sec" id="shrm">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="meta-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>EST. 1948</div>
+        <div class="eyebrow rv"><span class="idx">02</span>What Is SHRM?</div>
+        <h2 class="h2 rv" style="--d:.08s">The biggest name<br>in <span class="serif-i gold">people.</span></h2>
+      </div>
+      <div class="shrm-grid">
+        <div class="shrm-copy rv-l rv">
+          <p><b>SHRM — the Society for Human Resource Management —</b> is the world's largest HR professional association: 340,000+ members shaping better workplaces across 180 countries.</p>
+          <p>Our chapter is the student arm of that network. Being here plugs you into national resources, scholarships, SHRM-CP certification prep, and a professional community that starts on campus and goes global.</p>
+          <span class="affil"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Student chapter · Affiliated with SHRM National</span>
+        </div>
+        <div class="shrm-facts rv-r rv" style="--d:.12s">
+          <div class="fact"><div class="fv">1948</div><div class="fl">Founded</div></div>
+          <div class="fact"><div class="fv">340K+</div><div class="fl">Members worldwide</div></div>
+          <div class="fact"><div class="fv">180</div><div class="fl">Countries</div></div>
+          <div class="fact"><div class="fv">SHRM-CP</div><div class="fl">Certification path</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ═══════════════════════════ EVENTS TAB ═══════════════════════════ -->
+<section class="view" data-view="/events">
   <!-- EVENTS -->
   <section class="sec" id="events">
     <div class="wrap">
       <div class="sec-head">
         <div class="meta-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>FALL LINEUP</div>
-        <div class="eyebrow rv"><span class="idx">02</span>This Semester</div>
+        <div class="eyebrow rv"><span class="idx">✦</span>This Semester</div>
         <h2 class="h2 rv" style="--d:.08s">Show up. <span class="serif-i gold">Level up.</span></h2>
         <p class="lead rv" style="--d:.16s">Every event earns points toward Active and Premium membership. Scan the QR at the door and you're counted.</p>
       </div>
@@ -826,13 +952,17 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
     </div>
   </section>
 
+</section>
+
+<!-- ═══════════════════════════ E-BOARD TAB ═══════════════════════════ -->
+<section class="view" data-view="/eboard">
   <!-- TEAM -->
   <section class="sec" id="team">
     <div class="ghost" aria-hidden="true">LEADERS</div>
     <div class="wrap">
       <div class="sec-head">
         <div class="meta-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>E-BOARD</div>
-        <div class="eyebrow rv"><span class="idx">03</span>The Team</div>
+        <div class="eyebrow rv"><span class="idx">✦</span>The E-Board</div>
         <h2 class="h2 rv" style="--d:.08s">Led by students,<br><span class="serif-i gold">for students.</span></h2>
       </div>
       <!-- TEAM CARDS: edit names/roles here -->
@@ -849,15 +979,24 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
         <div class="adv"><span class="mini">FB</span><span><b>Frank Bosco</b><i>Faculty Advisor</i></span></div>
         <div class="adv"><span class="mini">DF</span><span><b>Dorothy Fountaine</b><i>Faculty Advisor</i></span></div>
       </div>
+      <div class="ev-note rv" style="margin-top:56px">
+        <p><b>Want a seat at the table?</b> Open positions are real — reach out and we'll tell you how elections and committees work.</p>
+        <a class="btn btn-ghost" href="#/contact">Contact the Board
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
     </div>
   </section>
 
+</section>
+
+<!-- ═══════════════════════════ ABOUT TAB · gallery fragment ═══════════════════════════ -->
+<section class="view active" data-view="/">
   <!-- GALLERY: swap each .ph-art for <img class="ph-img" src="photo.jpg" alt="..."> -->
   <section class="sec" id="gallery">
     <div class="wrap">
       <div class="sec-head">
         <div class="meta-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>FILM ROLL</div>
-        <div class="eyebrow rv"><span class="idx">04</span>Chapter Life</div>
+        <div class="eyebrow rv"><span class="idx">03</span>Chapter Life</div>
         <h2 class="h2 rv" style="--d:.08s">Moments worth <span class="serif-i gold">framing.</span></h2>
       </div>
       <div class="gal">
@@ -871,14 +1010,31 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
     </div>
   </section>
 
+</section>
+
+<!-- ═══════════════════════════ MEMBERSHIP TAB ═══════════════════════════ -->
+<section class="view" data-view="/membership">
   <!-- MEMBERSHIP & POINTS -->
   <section class="sec" id="membership">
     <div class="wrap">
       <div class="sec-head">
         <div class="meta-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>THE SYSTEM</div>
-        <div class="eyebrow rv"><span class="idx">05</span>Membership &amp; Points</div>
+        <div class="eyebrow rv"><span class="idx">✦</span>Membership &amp; Points</div>
         <h2 class="h2 rv" style="--d:.08s">Three levels.<br><span class="serif-i gold">One semester.</span></h2>
         <p class="lead rv" style="--d:.16s">Points reset each semester — every member starts the race fresh. Here's how far showing up can take you.</p>
+      </div>
+
+      <!-- REAL-LINKS: RamsConnect is live; point the application button at your Google Form / RamsConnect application -->
+      <div class="app-cta rv">
+        <div class="txt">
+          <b>Become a member in two clicks.</b>
+          <span>Join the org on RamsConnect, then complete the membership application. That's it — you're in.</span>
+        </div>
+        <div class="btns">
+          <a class="btn btn-gold" href="https://bit.ly/SHRMatVCU" target="_blank" rel="noopener">Join on RamsConnect
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          <a class="btn btn-ghost" href="https://forms.gle/your-membership-application" target="_blank" rel="noopener">Membership Application</a>
+        </div>
       </div>
 
       <div class="tiers">
@@ -943,14 +1099,54 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
         <div class="step rv" style="--d:.15s"><div class="num">2</div><h4>Get recorded</h4><p>Attendance and points are logged after each event.</p></div>
         <div class="step rv" style="--d:.3s"><div class="num">3</div><h4>Watch you climb</h4><p>Track your progress to Active and Premium on the leaderboard.</p></div>
       </div>
+
+      <!-- MEMBERSHIP TRACKER -->
+      <div class="track-box rv" id="tracker">
+        <div class="track-head">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span>
+          <h3>Track your membership</h3>
+        </div>
+        <p class="track-sub">Enter the email you check in with to see your points, tier, and event history for <b style="color:var(--ecru)">Fall 2026</b>.</p>
+        <div class="track-row">
+          <input id="track-email" type="email" placeholder="you@vcu.edu" aria-label="Your check-in email" autocomplete="email">
+          <button class="btn btn-gold" id="track-go" type="button">Look Me Up
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+        </div>
+        <div class="track-result" id="track-result">
+          <div class="tr-top">
+            <span class="av" id="tr-av">—</span>
+            <span class="nm"><b id="tr-name">—</b><span id="tr-email">—</span></span>
+            <span id="tr-tier"></span>
+          </div>
+          <div class="tr-stats">
+            <div class="tr-stat"><div class="v" id="tr-pts">0</div><div class="l">Points</div></div>
+            <div class="tr-stat"><div class="v" id="tr-next">—</div><div class="l" id="tr-next-l">To next tier</div></div>
+            <div class="tr-stat"><div class="v" id="tr-guests">0/4</div><div class="l">Guests used</div></div>
+          </div>
+          <div class="prog" style="max-width:none;margin:0 0 6px"><div class="fill" id="tr-fill"></div></div>
+          <ul class="tr-hist" id="tr-hist"></ul>
+        </div>
+        <div class="track-empty" id="track-empty">
+          No check-ins found for that email on this device yet. Scan the QR at your next event — your points will show up here. ✦
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:44px" class="rv">
+        <a class="btn btn-ghost" href="#/leaderboard">See the Full Leaderboard</a>
+        <a class="btn btn-ghost" href="#/check-in">Open Event Check-In</a>
+      </div>
     </div>
   </section>
 
+</section>
+
+<!-- ═══════════════════════════ ABOUT TAB · join fragment ═══════════════════════════ -->
+<section class="view active" data-view="/">
   <!-- JOIN -->
   <section class="sec" id="join">
     <div class="wrap">
       <div class="panel rv-s rv">
-        <div class="eyebrow" style="justify-content:center"><span class="idx">06</span>Join Us</div>
+        <div class="eyebrow" style="justify-content:center"><span class="idx">04</span>Join Us</div>
         <h2>Your seat at the table is <span class="serif-i gold">waiting.</span></h2>
         <p class="lead">Three small steps. One big community.</p>
         <div class="join-steps">
@@ -959,13 +1155,11 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
           <span class="jstep"><b>3</b> Come to an event</span>
         </div>
         <div class="join-ctas">
-          <!-- REAL-LINKS: point these at your RamsConnect page / Instagram / email -->
+          <!-- REAL-LINKS: RamsConnect live; set your application form URL -->
           <a class="btn btn-gold" href="https://bit.ly/SHRMatVCU" target="_blank" rel="noopener">Join on RamsConnect
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-          <a class="btn btn-ghost" href="https://www.instagram.com/shrm.vcu/" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
-            Follow the Chapter</a>
-          <a class="btn btn-ghost" href="mailto:yourclub@vcu.edu">Email the Board</a>
+          <a class="btn btn-ghost" href="https://forms.gle/your-membership-application" target="_blank" rel="noopener">Membership Application</a>
+          <a class="btn btn-ghost" href="#/membership">Membership &amp; Points</a>
         </div>
         <div class="fineprint">Open to all majors · No experience needed</div>
       </div>
@@ -974,7 +1168,7 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
 </section>
 
 <!-- ═══════════════════════════ CHECK-IN VIEW ═══════════════════════════ -->
-<section class="view" id="view-checkin">
+<section class="view" data-view="/check-in" id="view-checkin">
   <div class="page-head">
     <div class="ghost" aria-hidden="true">CHECK-IN</div>
     <div class="wrap">
@@ -1072,7 +1266,7 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
 </section>
 
 <!-- ═══════════════════════════ LEADERBOARD VIEW ═══════════════════════════ -->
-<section class="view" id="view-board">
+<section class="view" data-view="/leaderboard" id="view-board">
   <div class="page-head">
     <div class="ghost" aria-hidden="true">RANKS</div>
     <div class="wrap">
@@ -1105,6 +1299,97 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
     </div>
   </div>
 </section>
+
+<!-- ═══════════════════════════ SOCIALS TAB ═══════════════════════════ -->
+<section class="view" data-view="/socials">
+  <div class="page-head">
+    <div class="ghost" aria-hidden="true">FOLLOW</div>
+    <div class="wrap">
+      <div class="eyebrow" style="justify-content:center"><span class="idx">✦</span>Socials</div>
+      <h2 class="h2">Come say <span class="serif-i gold">hi.</span></h2>
+      <p class="lead" style="margin-inline:auto">Announcements, spotlights, and the group chat where everything actually happens.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding-bottom:130px">
+    <!-- REAL-LINKS: Instagram is live; drop in your GroupMe invite + LinkedIn page URLs -->
+    <div class="soc-grid">
+      <a class="soc rv" style="--acc:#57C1F0" href="https://groupme.com/join_group/YOUR-GROUP-ID" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3 9 9 0 0 1-3.2-.6L3 21l1.9-5.7a8 8 0 0 1-1.4-4.6A8.4 8.4 0 0 1 12 2.4a8.4 8.4 0 0 1 9 9.1Z"/><path d="M8.5 10h.01M12 10h.01M15.5 10h.01" stroke-width="2.4"/></svg></span>
+        <h3>GroupMe</h3>
+        <div class="hd">Chapter Chat</div>
+        <p>Where the day-to-day lives — reminders, memes, ride shares, and "who's going tonight?"</p>
+        <span class="go">Join the Chat<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="soc rv" style="--acc:var(--blush);--d:.1s" href="https://www.instagram.com/shrm.vcu/" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.6" cy="6.4" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+        <h3>Instagram</h3>
+        <div class="hd">@shrm.vcu</div>
+        <p>Event recaps, member spotlights, HR trivia, and the occasional sparkle. ✦</p>
+        <span class="go">Follow Us<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="soc rv" style="--acc:#6BA6E8;--d:.2s" href="https://www.linkedin.com/company/your-chapter" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="4"/><path d="M7 10.5v6"/><circle cx="7" cy="7.3" r="1.25" fill="currentColor" stroke="none"/><path d="M11.3 16.5v-6m0 2.6a2.7 2.7 0 0 1 5.4 0v3.4"/></svg></span>
+        <h3>LinkedIn</h3>
+        <div class="hd">Student Chapter</div>
+        <p>The professional side — alumni wins, partner companies, and your future coworkers.</p>
+        <span class="go">Connect<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+    <p class="rv" style="text-align:center;margin-top:40px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(241,236,225,.4)">Tag us when you post — we reshare the good stuff ✦</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CONTACT TAB ═══════════════════════════ -->
+<section class="view" data-view="/contact">
+  <div class="page-head">
+    <div class="ghost" aria-hidden="true">HELLO</div>
+    <div class="wrap">
+      <div class="eyebrow" style="justify-content:center"><span class="idx">✦</span>Contact</div>
+      <h2 class="h2">Talk to a <span class="serif-i gold">human.</span></h2>
+      <p class="lead" style="margin-inline:auto">Questions about joining, points, events, or partnering with the chapter — here's how to reach us.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding-bottom:130px">
+    <!-- REAL-LINKS: set your real chapter email -->
+    <div class="ct-grid">
+      <a class="ct-card rv" href="mailto:yourclub@vcu.edu">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>
+        <h3>Email the Board</h3>
+        <p>Best for anything official — partnerships, questions, points corrections.</p>
+        <span class="lk">yourclub@vcu.edu<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="ct-card rv" style="--d:.08s" href="https://www.instagram.com/shrm.vcu/" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3 9 9 0 0 1-3.2-.6L3 21l1.9-5.7a8 8 0 0 1-1.4-4.6A8.4 8.4 0 0 1 12 2.4a8.4 8.4 0 0 1 9 9.1Z"/></svg></span>
+        <h3>DM on Instagram</h3>
+        <p>Fastest reply for quick questions — usually same day.</p>
+        <span class="lk">@shrm.vcu<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <div class="ct-card rv" style="--d:.16s">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <h3>Catch Us on Campus</h3>
+        <p>General meetings alternate Wednesdays at 6 PM in Snead Hall — just walk in.</p>
+        <span class="lk">Snead Hall · Room 2105</span>
+      </div>
+      <div class="ct-card rv" style="--d:.24s">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <h3>Faculty Advisors</h3>
+        <p>Frank Bosco &amp; Dorothy Fountaine advise the chapter and love hearing from students.</p>
+        <span class="lk">Ask us for an intro</span>
+      </div>
+    </div>
+    <div class="app-cta rv">
+      <div class="txt">
+        <b>Not sure who to ask?</b>
+        <span>Send it to the board inbox — we'll route it to the right person.</span>
+      </div>
+      <div class="btns">
+        <a class="btn btn-gold" href="mailto:yourclub@vcu.edu?subject=Hello%20from%20the%20website">Email Us
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="#/socials">All Our Socials</a>
+      </div>
+    </div>
+  </div>
+</section>
 </main>
 
 <!-- ═══════════════ FOOTER ═══════════════ -->
@@ -1121,17 +1406,18 @@ footer{border-top:1px solid var(--line-soft);padding:56px 0 40px;position:relati
     <div class="f-links">
       <div class="f-col">
         <div class="t">Explore</div>
-        <a href="#about">About</a><a href="#events">Events</a><a href="#team">Team</a><a href="#gallery">Gallery</a>
+        <a href="#/">About</a><a href="#/events">Events</a><a href="#/eboard">E-Board</a><a href="#gallery">Gallery</a>
       </div>
       <div class="f-col">
         <div class="t">Points</div>
-        <a href="#membership">Membership</a><a href="#/check-in" data-route="/check-in">Check In</a><a href="#/leaderboard" data-route="/leaderboard">Leaderboard</a>
+        <a href="#/membership">Membership</a><a href="#/check-in">Check In</a><a href="#/leaderboard">Leaderboard</a>
       </div>
       <div class="f-col">
         <div class="t">Connect</div>
+        <a href="#/socials">Socials</a>
+        <a href="#/contact">Contact</a>
         <a href="https://www.instagram.com/shrm.vcu/" target="_blank" rel="noopener">Instagram</a>
         <a href="https://bit.ly/SHRMatVCU" target="_blank" rel="noopener">RamsConnect</a>
-        <a href="mailto:yourclub@vcu.edu">Email</a>
       </div>
     </div>
   </div>
@@ -1208,24 +1494,22 @@ window.addEventListener("load", () => {
 setTimeout(() => $("#loader").classList.add("done"), 2600); /* failsafe */
 
 /* ════════════════════════════ ROUTER ════════════════════════════ */
-const VIEWS = { "/": "view-home", "/check-in": "view-checkin", "/leaderboard": "view-board" };
+const ROUTES = ["/", "/events", "/membership", "/eboard", "/socials", "/contact", "/check-in", "/leaderboard"];
 let currentRoute = "/";
 
 function parseHash(){
   const h = location.hash || "#/";
   if (h.startsWith("#/")) {
     const [path, qs] = h.slice(1).split("?");
-    return { route: VIEWS[path] ? path : "/", query: new URLSearchParams(qs || ""), anchor: null };
+    return { route: ROUTES.includes(path) ? path : "/", query: new URLSearchParams(qs || ""), anchor: null };
   }
   return { route: "/", query: new URLSearchParams(), anchor: h.slice(1) };
 }
 function showView(route){
-  $$(".view").forEach(v => v.classList.remove("active"));
-  $("#" + VIEWS[route]).classList.add("active");
+  $$(".view").forEach(v => v.classList.toggle("active", v.dataset.view === route));
   currentRoute = route;
   $$(".nav-links .lnk").forEach(a => {
-    const r = a.getAttribute("data-route");
-    a.classList.toggle("active", !!r && r === route);
+    a.classList.toggle("active", a.getAttribute("data-route") === route);
   });
   requestAnimationFrame(() => requestAnimationFrame(observeAll));
 }
@@ -1618,6 +1902,42 @@ $("#lb-reset").addEventListener("click", () => {
     renderBoard();
   }
 });
+
+/* ════════════════════════════ MEMBERSHIP TRACKER ════════════════════════════ */
+function lookupMember(){
+  const email = $("#track-email").value.trim().toLowerCase();
+  const res = $("#track-result"), empty = $("#track-empty");
+  res.classList.remove("show"); empty.classList.remove("show");
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    empty.textContent = "Enter the email you use at check-in and we'll find you. ✦";
+    empty.classList.add("show"); return;
+  }
+  const m = store().members[email];
+  if (!m) {
+    empty.textContent = "No check-ins found for that email on this device yet. Scan the QR at your next event — your points will show up here. ✦";
+    empty.classList.add("show"); return;
+  }
+  const tier = tierOf(m.pts), next = tier === "General" ? 20 : tier === "Active" ? 30 : null;
+  $("#tr-av").textContent = initials(m.name || email);
+  $("#tr-name").textContent = m.name || email;
+  $("#tr-email").textContent = email;
+  $("#tr-tier").innerHTML = '<span class="tier-pill ' + tierClass(tier) + '">✦ ' + tier + '</span>';
+  $("#tr-pts").textContent = m.pts;
+  $("#tr-next").textContent = next ? (next - m.pts) : "MAX";
+  $("#tr-next-l").textContent = next ? ("Pts to " + (next === 20 ? "Active" : "Premium")) : "Top tier reached";
+  $("#tr-guests").textContent = m.guests + "/4";
+  const hist = store().log.filter(r => r.email === email);
+  $("#tr-hist").innerHTML = hist.map(r =>
+    '<li><b>' + esc(r.event) + '</b><span class="pt">+' + r.total + ' pts</span></li>').join("");
+  res.classList.add("show");
+  const fill = $("#tr-fill");
+  fill.style.width = "0%";
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    fill.style.width = (next ? Math.min(100, m.pts / next * 100) : 100) + "%";
+  }));
+}
+$("#track-go").addEventListener("click", lookupMember);
+$("#track-email").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); lookupMember(); } });
 
 /* ════════════════════════════ CONFETTI ════════════════════════════ */
 function confetti(){
