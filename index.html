@@ -307,11 +307,9 @@ section{position:relative;scroll-margin-top:104px}
   font-family:"Bricolage Grotesque",var(--sans);font-weight:800;text-transform:none;letter-spacing:-.015em;
   font-size:clamp(44px,7.6vw,102px);color:var(--blue);
   max-width:13ch;margin-bottom:30px;line-height:1.02;
-  text-shadow:1px 1px 0 #0067A8,2px 2px 0 #005D98,3px 3px 0 #005489,4px 4px 0 #004B7A,5px 5px 0 #00426C,6px 6px 0 #063A5E,7px 7px 0 #0A3350,8px 8px 0 #0D2C44,0 18px 36px rgba(0,9,62,.35);
 }
 .h1 .it{
   font-family:inherit;font-style:normal;color:var(--navy-mid);position:relative;white-space:nowrap;
-  text-shadow:1px 1px 0 #1F5183,2px 2px 0 #1B4874,3px 3px 0 #173F66,4px 4px 0 #133657,5px 5px 0 #0F2D49,6px 6px 0 #0C253C,7px 7px 0 #081D2F,8px 8px 0 #051523,0 18px 36px rgba(0,9,62,.35);
 }
 .h1 .it::after{
   content:"";position:absolute;inset:-14% -7% -18% -7%;background:var(--scribble) center/100% 100% no-repeat;
@@ -813,22 +811,6 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
 .f-col a:hover{color:var(--gold);padding-left:6px}
 .f-bottom{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:22px 0 30px;border-top:1px solid rgba(241,236,225,.14);color:rgba(241,236,225,.55);font-size:12.5px;position:relative}
 
-/* ─────────────────────────── 3D SCENE (mouse perspective) ─────────────────────────── */
-#hero{perspective:1150px}
-.hero-grid{transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .18s ease-out;will-change:transform}
-.hero-grid .h1{transform:translateZ(72px)}
-.hero-grid .hero-chips{transform:translateZ(34px)}
-.hero-grid .hero-sub{transform:translateZ(50px) rotate(-.6deg)}
-.hero-grid .hero-ctas{transform:translateZ(58px)}
-.hero-grid .hero-stats{transform:translateZ(24px)}
-.d-star{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(96px) rotate(9deg)}
-.d-bubble{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(70px)}
-.d-arrow{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(54px) rotate(6deg)}
-@media (prefers-reduced-motion: reduce){
-  .hero-grid,.d-star,.d-bubble,.d-arrow{transform:none}
-  .hero-grid .h1,.hero-grid .hero-chips,.hero-grid .hero-sub,.hero-grid .hero-ctas,.hero-grid .hero-stats{transform:none}
-}
-
 /* ─────────────────────────── RESPONSIVE ─────────────────────────── */
 @media (max-width:1060px){
   .nav-links .lnk{display:none}
@@ -1105,15 +1087,14 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
         <div class="meta-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>FILM ROLL</div>
         <div class="eyebrow rv"><span class="idx">03</span>Chapter Life</div>
         <h2 class="h2 rv" style="--d:.08s">Moments worth <span class="serif-i gold">framing.</span></h2>
-        <p class="note-hand rv" style="--d:.16s;margin-top:10px">polaroids from the wall — real photos coming soon ✦</p>
+        <p class="note-hand rv" style="--d:.16s;margin-top:10px">real moments from the chapter ✦</p>
       </div>
       <div class="gal">
-        <figure class="ph tall rv"><div class="ph-art g1" data-n="01"></div><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>Networking Night</figcaption></figure>
-        <figure class="ph rv" style="--d:.08s"><div class="ph-art g2" data-n="02"></div><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>Interest Meeting</figcaption></figure>
-        <figure class="ph rv" style="--d:.16s"><div class="ph-art g3" data-n="03"></div><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>Coffee Chats</figcaption></figure>
-        <figure class="ph rv" style="--d:.1s"><div class="ph-art g4" data-n="04"></div><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>Service Saturday</figcaption></figure>
-        <figure class="ph tall rv" style="--d:.18s"><div class="ph-art g5" data-n="05"></div><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>Conference Trip</figcaption></figure>
-        <figure class="ph rv" style="--d:.26s"><div class="ph-art g6" data-n="06"></div><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>End-of-Semester Social</figcaption></figure>
+        <!-- GALLERY: photos live in the /photos folder of the repo -->
+        <figure class="ph tall rv"><img class="ph-img" src="photos/gallery-2.jpg" alt="A member smiling at a chapter social"><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>Chapter socials</figcaption></figure>
+        <figure class="ph rv" style="--d:.08s"><img class="ph-img" src="photos/gallery-1.jpg" alt="Five members holding the official Affiliate of SHRM banner"><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>The chapter, official ✦</figcaption></figure>
+        <figure class="ph tall rv" style="--d:.16s"><img class="ph-img" src="photos/gallery-3.jpg" alt="Members around the table at a general body meeting"><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>General body meeting</figcaption></figure>
+        <figure class="ph rv" style="--d:.1s"><img class="ph-img" src="photos/gallery-4.jpg" alt="The SHRM at VCU display board at a tabling event in the VCU Business atrium"><figcaption class="cap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>Tabling at VCU Business</figcaption></figure>
       </div>
     </div>
   </section>
@@ -2209,29 +2190,6 @@ if (INSTANT) {
   $$(".rv").forEach(el => el.classList.add("in"));
   $$("[data-count]").forEach(el => { el.textContent = el.dataset.count; el._done = true; });
 }
-/* 3D: hero mouse perspective */
-(function(){
-  if (reduceMotion) return;
-  const hero = $("#hero");
-  if (!hero) return;
-  let raf = null;
-  hero.addEventListener("mousemove", e => {
-    if (raf) return;
-    raf = requestAnimationFrame(() => {
-      raf = null;
-      const r = hero.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - .5;
-      const y = (e.clientY - r.top) / r.height - .5;
-      hero.style.setProperty("--ry", (x * 5).toFixed(2) + "deg");
-      hero.style.setProperty("--rx", (-y * 4).toFixed(2) + "deg");
-    });
-  });
-  hero.addEventListener("mouseleave", () => {
-    hero.style.setProperty("--ry", "0deg");
-    hero.style.setProperty("--rx", "0deg");
-  });
-})();
-
 /* 3D: cursor tilt on flyers / polaroids / team cards / facts */
 (function(){
   if (reduceMotion || !matchMedia("(hover:hover) and (pointer:fine)").matches) return;
