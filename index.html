@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23E9E6DE'/%3E%3Cg fill='none' stroke='%23B7BCC3' stroke-width='1.4'%3E%3Ccircle cx='0' cy='64' r='12'/%3E%3Ccircle cx='0' cy='64' r='24'/%3E%3Ccircle cx='0' cy='64' r='36'/%3E%3Ccircle cx='0' cy='64' r='48'/%3E%3Ccircle cx='64' cy='0' r='12'/%3E%3Ccircle cx='64' cy='0' r='24'/%3E%3Ccircle cx='64' cy='0' r='36'/%3E%3Ccircle cx='64' cy='0' r='48'/%3E%3C/g%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Georgia,serif' font-size='18' font-weight='700' fill='%231B3C69'%3ESHRM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
@@ -301,21 +301,28 @@ section{position:relative;scroll-margin-top:104px}
   box-shadow:inset 0 16px 26px -16px rgba(0,9,62,.5);
 }
 .hero-grid{position:relative;z-index:2}
+/* ── 3D coin — spinning chapter emblem (js/shrm-coin.js + models/shrm-logo.glb) ── */
+#shrm-coin-3d{aspect-ratio:1;position:relative;z-index:1}
+#shrm-coin-3d .coin-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#shrm-coin-3d .coin-fallback svg{width:72%;height:72%;border-radius:50%;box-shadow:0 18px 40px -12px rgba(0,9,62,.35)}
+#shrm-coin-3d.coin-live .coin-fallback{display:none}
+@media (min-width:1280px){
+  #shrm-coin-3d{position:absolute;right:3vw;top:50%;transform:translateY(-54%);width:min(36vw,540px)}
+}
+@media (max-width:1279.98px){
+  #shrm-coin-3d{width:min(64vw,320px);margin:48px auto 0}
+}
 .hero-chips{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:38px}
 /* the mounted headline */
 .h1{
-  font-family:"Bricolage Grotesque",var(--sans);font-weight:800;text-transform:none;letter-spacing:-.015em;
-  font-size:clamp(44px,7.6vw,102px);color:var(--blue);
-  max-width:13ch;margin-bottom:30px;line-height:1.02;
+  font-family:var(--disp);font-weight:400;text-transform:uppercase;letter-spacing:.012em;
+  font-size:clamp(50px,8.4vw,112px);color:var(--ink-deep);
+  max-width:13ch;margin-bottom:30px;line-height:1;
 }
 .h1 .it{
-  font-family:inherit;font-style:normal;color:var(--navy-mid);position:relative;white-space:nowrap;
+  font-family:inherit;font-style:normal;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:3px var(--blue);
 }
-.h1 .it::after{
-  content:"";position:absolute;inset:-14% -7% -18% -7%;background:var(--scribble) center/100% 100% no-repeat;
-  opacity:0;animation:scribbleIn .01s .9s forwards;
-}
-@keyframes scribbleIn{to{opacity:1}}
 .hero-sub{
   font-size:clamp(16px,1.7vw,18.5px);line-height:1.75;font-weight:500;
   color:var(--navy);max-width:540px;margin-bottom:40px;
@@ -941,6 +948,14 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
         <div class="hst"><div class="n"><span data-count="100">0</span><em>%</em></div><div class="l">people-first</div></div>
       </div>
     </div>
+
+    <!-- 3D COIN — the spinning chapter emblem. Drag to spin; auto-resumes.
+         Model: models/shrm-logo.glb · Loader: js/shrm-coin.js (Three.js bundled).
+         The SVG below is a static fallback shown until WebGL takes over. -->
+    <div id="shrm-coin-3d" role="img" aria-label="SHRM at VCU chapter emblem — drag to spin">
+      <div class="coin-fallback" aria-hidden="true"><svg viewBox='0 0 100 100'><defs><clipPath id='lgCoin'><circle cx='50' cy='50' r='50'/></clipPath></defs><g clip-path='url(#lgCoin)'><rect width='100' height='100' fill='#E9E6DE'/><g fill='none' stroke='#B7BCC3' stroke-width='1.6'><circle cx='0' cy='100' r='15'/><circle cx='0' cy='100' r='27'/><circle cx='0' cy='100' r='39'/><circle cx='0' cy='100' r='51'/><circle cx='0' cy='100' r='63'/><circle cx='0' cy='100' r='75'/><circle cx='0' cy='100' r='87'/><circle cx='100' cy='0' r='15'/><circle cx='100' cy='0' r='27'/><circle cx='100' cy='0' r='39'/><circle cx='100' cy='0' r='51'/><circle cx='100' cy='0' r='63'/><circle cx='100' cy='0' r='75'/><circle cx='100' cy='0' r='87'/><circle cx='100' cy='100' r='18'/><circle cx='100' cy='100' r='30'/><circle cx='100' cy='100' r='42'/></g><text x='50' y='61' text-anchor='middle' font-family='Bodoni Moda,Didot,serif' font-size='33' font-weight='600' fill='#1B3C69'>SHRM</text><text x='79' y='34' text-anchor='middle' font-family='Manrope,sans-serif' font-size='7' font-weight='800' letter-spacing='1.4' fill='#1B3C69'>@VCU</text></g></svg></div>
+    </div>
+
     <div class="scroll-cue" aria-hidden="true"><div class="mouse"></div>scroll to explore</div>
   </section>
 
@@ -2227,5 +2242,7 @@ if (INSTANT) {
 observeAll();
 handleRoute();
 </script>
+<!-- 3D coin logo (Three.js bundled; initializes after page load, respects prefers-reduced-motion) -->
+<script src="js/shrm-coin.js" defer></script>
 </body>
 </html>
