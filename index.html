@@ -379,6 +379,7 @@ section{position:relative;scroll-margin-top:104px}
 .shrm-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center}
 .shrm-copy p{color:var(--ink);font-size:16.5px;margin-bottom:18px;max-width:56ch}
 .shrm-copy p b{color:var(--ink-deep)}
+.cred-row{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
 .affiliate-badge{margin-top:24px}
 .affiliate-badge svg{filter:drop-shadow(0 10px 22px rgba(0,9,62,.15))}
 .affil{
@@ -921,6 +922,7 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
       <div class="hero-chips rv">
         <span class="chip"><span class="dot"></span>Student Chapter — Richmond, VA</span>
         <span class="chip" style="background:var(--gold)">Fall 2026 · Now Recruiting</span>
+        <span class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#DB9414" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M17 4H7v5a5 5 0 0 0 10 0Z"/><path d="M17 5h3a1 1 0 0 1 1 1c0 2.5-2 4-4 4M7 5H4a1 1 0 0 0-1 1c0 2.5 2 4 4 4"/></svg>SHRM Merit Award · 2 Years Running</span>
       </div>
       <h1 class="h1 rv" style="--d:.08s">Putting the <span class="it">human</span> in Human Resources.</h1>
       <p class="hero-sub rv" style="--d:.16s">
@@ -1002,14 +1004,28 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
           <!-- AFFILIATE-LOGO: swap this placeholder badge for the official SHRM
                affiliate logo file when the chapter receives it:
                <img src="shrm-affiliate.png" alt="SHRM Affiliate Chapter" style="max-width:220px;margin-top:22px"> -->
-          <div class="affiliate-badge" role="img" aria-label="SHRM Affiliate Chapter badge">
-            <svg viewBox="0 0 260 92" width="240">
-              <rect x="1.5" y="1.5" width="257" height="89" rx="10" fill="#FFFFFF" stroke="#1B3C69" stroke-width="3"/>
-              <text x="24" y="52" font-family="Bodoni Moda,Didot,serif" font-weight="700" font-size="38" fill="#1B3C69">SHRM</text>
-              <rect x="142" y="22" width="2.5" height="48" fill="#0076BE"/>
-              <text x="158" y="42" font-family="Manrope,sans-serif" font-weight="800" font-size="12.5" letter-spacing="1.6" fill="#0076BE">AFFILIATE</text>
-              <text x="158" y="60" font-family="Manrope,sans-serif" font-weight="800" font-size="12.5" letter-spacing="1.6" fill="#1B3C69">CHAPTER</text>
-            </svg>
+          <div class="cred-row">
+            <div class="affiliate-badge" role="img" aria-label="SHRM Affiliate Chapter badge">
+              <svg viewBox="0 0 260 92" width="240">
+                <rect x="1.5" y="1.5" width="257" height="89" rx="10" fill="#FFFFFF" stroke="#1B3C69" stroke-width="3"/>
+                <text x="24" y="52" font-family="Bodoni Moda,Didot,serif" font-weight="700" font-size="38" fill="#1B3C69">SHRM</text>
+                <rect x="142" y="22" width="2.5" height="48" fill="#0076BE"/>
+                <text x="158" y="42" font-family="Manrope,sans-serif" font-weight="800" font-size="12.5" letter-spacing="1.6" fill="#0076BE">AFFILIATE</text>
+                <text x="158" y="60" font-family="Manrope,sans-serif" font-weight="800" font-size="12.5" letter-spacing="1.6" fill="#1B3C69">CHAPTER</text>
+              </svg>
+            </div>
+            <div class="affiliate-badge" role="img" aria-label="SHRM National Merit Award, two years running">
+              <svg viewBox="0 0 260 92" width="240">
+                <rect x="1.5" y="1.5" width="257" height="89" rx="10" fill="#1B3C69" stroke="#1B3C69" stroke-width="3"/>
+                <g transform="translate(22,24)" fill="none" stroke="#FBB533" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 34h20M22 26v8M32 4H12v9a10 10 0 0 0 20 0Z"/>
+                  <path d="M32 6h6a2 2 0 0 1 2 2c0 5-4 8-8 8M12 6H6a2 2 0 0 0-2 2c0 5 4 8 8 8"/>
+                </g>
+                <text x="82" y="34" font-family="Manrope,sans-serif" font-weight="800" font-size="13" letter-spacing="1.4" fill="#FBB533">NATIONAL MERIT</text>
+                <text x="82" y="52" font-family="Manrope,sans-serif" font-weight="800" font-size="13" letter-spacing="1.4" fill="#FFFFFF">AWARD WINNER</text>
+                <text x="82" y="70" font-family="Manrope,sans-serif" font-weight="700" font-size="10.5" letter-spacing="1.2" fill="#79ADD8">TWO YEARS RUNNING</text>
+              </svg>
+            </div>
           </div>
         </div>
         <div class="shrm-facts rv-r rv" style="--d:.12s">
