@@ -1575,6 +1575,11 @@ const EVENTS = [
 
 const GUEST_PTS = 3, MAX_GUESTS = 4, MAX_GUEST_PTS = 12;
 
+/* Test/demo accounts to keep off the leaderboard, tracker, and CSV export.
+   Add an email here to retire it without touching anyone's real points. */
+const HIDDEN_EMAILS = ["test.ram@vcu.edu"];
+const isHidden = e => HIDDEN_EMAILS.includes(String(e || "").trim().toLowerCase());
+
 /* demo leaderboard seed — replace with your roster */
 const SAMPLE_MEMBERS = [
   { name:"Maya Okafor",      pts:38 }, { name:"Dylan Baker",   pts:34 },
@@ -2047,10 +2052,11 @@ function copyQRLink(){
 function allMembers(){
   if (LIVE) {
     return Object.values(LIVE_MEMBERS)
+      .filter(m => !isHidden(m.email))
       .map(m => ({ name: m.name || m.email, pts: m.pts || 0, you: !!MY_EMAIL && m.email === MY_EMAIL }))
       .sort((a, b) => b.pts - a.pts);
   }
-  const local = Object.values(store().members).map(m => ({ name: m.name, pts: m.pts, you: true }));
+  const local = Object.values(store().members).filter(m => !isHidden(m.email)).map(m => ({ name: m.name, pts: m.pts, you: true }));
   const seedFiltered = SAMPLE_MEMBERS.filter(s => !local.some(l => l.name.toLowerCase() === s.name.toLowerCase()));
   return [...seedFiltered, ...local].sort((a, b) => b.pts - a.pts);
 }
@@ -2074,9 +2080,18 @@ function medalSVG(rank, size){
 function renderBoard(){
   const list = allMembers();
   const q = ($("#lb-search").value || "").toLowerCase();
+  const pod = $("#podium");
+  /* nobody has checked in yet — skip the podium entirely */
+  if (!list.length) {
+    pod.innerHTML = ""; pod.style.display = "none";
+    $("#lb-list").innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px 0 26px">' +
+      'The board opens with the first check-in of the semester. Scan the QR at the next event to claim the top spot. ✦</p>';
+    return;
+  }
+  pod.style.display = "";
   /* podium */
   const podOrder = [1, 0, 2]; /* silver · gold · bronze columns */
-  $("#podium").innerHTML = podOrder.map(i => {
+  pod.innerHTML = podOrder.map(i => {
     const m = list[i]; if (!m) return "<div></div>";
     const rank = i + 1, tier = tierOf(m.pts);
     return '<div class="pod pod-' + rank + '">' +
@@ -2101,14 +2116,17 @@ function renderBoard(){
       '<div class="bar"><i class="' + (tier !== "General" ? "gold" : "") + '" data-w="' + w + '"></i></div></div>' +
       '<span class="tier-pill ' + tierClass(tier) + '">' + tier + '</span>' +
       '<div class="pv">' + m.pts + '<br><i>PTS</i></div></div>';
-  }).join("") : '<p style="text-align:center;color:var(--muted);padding:30px 0">No members match that search. ✦</p>';
+  }).join("") : '<p style="text-align:center;color:var(--muted);padding:30px 0">' +
+    (q ? "No members match that search. ✦"
+       : "That's the whole board so far — more names land here as members check in. ✦") + '</p>';
   requestAnimationFrame(() => requestAnimationFrame(() => {
     $$("#lb-list .bar i").forEach(b => b.style.width = b.dataset.w + "%");
   }));
 }
 $("#lb-search").addEventListener("input", renderBoard);
 $("#lb-csv").addEventListener("click", () => {
-  const doCsv = log => {
+  const doCsv = rows => {
+    const log = rows.filter(r => !isHidden(r.email));
     const head = "timestamp,name,email,event,type,base,guests,guest_pts,total\n";
     const body = log.map(r => [r.ts, r.name, r.email, r.event, r.type, r.base, r.guests, r.guestPts, r.total]
       .map(v => '"' + String(v).replace(/"/g, '""') + '"').join(",")).join("\n");
@@ -2134,6 +2152,10 @@ function lookupMember(){
   res.classList.remove("show"); empty.classList.remove("show");
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     empty.textContent = "Enter the email you use at check-in and we'll find you. ✦";
+    empty.classList.add("show"); return;
+  }
+  if (isHidden(email)) {
+    empty.textContent = "No check-ins found for that email yet. Scan the QR at your next event — your points will show up here. ✦";
     empty.classList.add("show"); return;
   }
   if (LIVE) {
