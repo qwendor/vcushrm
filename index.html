@@ -1568,8 +1568,8 @@ const TYPES = {
 };
 
 const EVENTS = [
-  /* ← EDIT ME: set the real time / location for tonight's interest meeting */
-  { id:"ev-interest", title:"Interest Meeting", type:"interest", day:"22", mon:"Sep", time:"Time TBA", loc:"Location TBA", guests:true, desc:"New here? Start here. Meet the e-board, hear the plan for the semester." },
+  /* loc:"" hides the location line everywhere it renders */
+  { id:"ev-interest", title:"Interest Meeting", type:"interest", day:"22", mon:"Sep", time:"6:30-8:00 PM", loc:"", guests:true, desc:"New here? Start here. Meet the e-board, hear the plan for the semester." },
   /* ← EDIT ME: fill in the real title / time / location for Sept 22 */
   { id:"ev-sep22",  title:"September Chapter Event",  type:"general", day:"22", mon:"Sep", time:"Time TBA", loc:"Location TBA", guests:true,  desc:"Details dropping soon — watch @shrm.vcu for the announcement." },
   { id:"ev-coffee", title:"Coffee Chat (anytime)",    type:"coffee",  day:"✦",  mon:"Any", time:"Anytime",  loc:"Anywhere public", guests:false, desc:"Grab coffee with a member. E-board verifies it." },
@@ -1836,7 +1836,7 @@ function countUp(el){
       '<span class="pts">+' + t.pts + ' PTS</span></div>' +
       '<h3>' + esc(e.title) + '</h3>' +
       '<div class="meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>' + e.time + '</span>' +
-      '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>' + esc(e.loc) + '</span></div>' +
+      (e.loc ? '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>' + esc(e.loc) + '</span>' : '') + '</div>' +
       '<p style="color:var(--muted);font-size:14px">' + esc(e.desc) + '</p>' +
       '<span class="tag">' + t.label + '</span></article>';
   }).join("");
@@ -1921,7 +1921,7 @@ function initCheckin(eventId){
     $("#ck-ticket").style.display = "";
     $("#f-event").style.display = "none";
     $("#tk-title").textContent = lockedEvent.title;
-    $("#tk-meta").textContent = lockedEvent.mon + " " + lockedEvent.day + " · " + lockedEvent.time + " · " + lockedEvent.loc;
+    $("#tk-meta").textContent = [lockedEvent.mon + " " + lockedEvent.day, lockedEvent.time, lockedEvent.loc].filter(Boolean).join(" · ");
   } else {
     $("#ck-ticket").style.display = "none";
     $("#f-event").style.display = "";
