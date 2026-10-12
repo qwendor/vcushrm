@@ -864,6 +864,172 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
   .scroll-cue{display:none}
 }
 </style>
+<style>
+/* ════ Coffee Chat flyer (animated, scoped .cc-*) ════ */
+/* Everything is scoped under .cc-flyer so it can sit inside the chapter site without
+   touching the site's own classes. The artboard is a fixed 1080 x 1350 (4:5) design
+   that a tiny script scales to whatever width the flyer is given.
+   Motion: entrance plays once when the flyer scrolls into view (click to replay),
+   then steam, beans, badge and the ticker keep moving. No JS or reduced motion = static. */
+.cc-flyer{
+  --ink:#00093E; --navy:#1B3C69; --navy2:#265D93; --blue:#0076BE; --powder:#79ADD8;
+  --gold:#FBB533; --gold2:#DB9414; --lav:#9A7FD6; --lav2:#5B3FA3; --lav-t:#CDBDF2;
+  --paper:#E4EDF7; --card:#FBFDFF; --ecru:#F1ECE1;
+  --cc-s:1;
+  position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;border-radius:18px;
+  box-shadow:0 18px 40px -18px rgba(0,9,62,.45);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.cc-flyer *{box-sizing:border-box;margin:0;padding:0}
+.cc-art{position:absolute;left:0;top:0;width:1080px;height:1350px;transform:scale(var(--cc-s));transform-origin:0 0;
+  overflow:hidden;background:var(--paper);font-family:"Manrope",system-ui,sans-serif;color:var(--ink);
+  -webkit-font-smoothing:antialiased}
+.cc-art > *{position:absolute}
+.cc-anton{font-family:"Anton","Impact",sans-serif;text-transform:uppercase;font-weight:400;line-height:.85}
+.cc-serif{font-family:"Bodoni Moda","Didot",Georgia,serif;font-style:italic;font-weight:600}
+
+/* scenery */
+.cc-blob{z-index:0}
+.cc-wash{inset:0;z-index:0;background:radial-gradient(70% 50% at 40% 38%,rgba(255,255,255,.7),rgba(255,255,255,0) 70%)}
+.cc-dots{z-index:0;background-size:18px 18px}
+.cc-noise{inset:0;width:100%;height:100%;opacity:.055;mix-blend-mode:multiply;z-index:20;pointer-events:none}
+
+/* header */
+.cc-hdr{left:56px;top:46px;display:flex;align-items:center;gap:16px;z-index:5}
+.cc-wm{font-family:"Anton",sans-serif;font-size:40px;line-height:1;color:var(--ink)}
+.cc-wm b{font-weight:400;color:var(--blue)}
+.cc-chip{background:var(--lav);color:#fff;border:3px solid var(--ink);border-radius:999px;padding:7px 18px 8px;
+  font-size:19px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;box-shadow:4px 5px 0 rgba(0,9,62,.2)}
+
+/* title */
+.cc-coffee{left:48px;top:122px;font-size:236px;letter-spacing:.01em;color:var(--ink);z-index:4;white-space:nowrap;
+  text-shadow:9px 9px 0 rgba(0,9,62,.12)}
+.cc-l{display:inline-block}
+.cc-chat{left:58px;top:298px;font-size:228px;line-height:1;color:var(--lav);z-index:5;white-space:nowrap;
+  text-shadow:8px 8px 0 rgba(62,40,138,.24)}
+.cc-swash{left:70px;top:512px;width:400px;height:60px;z-index:4;overflow:visible}
+
+/* rotating badge */
+.cc-badge{left:738px;top:40px;width:272px;height:272px;z-index:6}
+.cc-badge svg{width:100%;height:100%;display:block;overflow:visible}
+
+/* cup */
+.cc-sun{left:604px;top:536px;width:452px;height:452px;border-radius:50%;background:var(--gold);z-index:1;
+  border:3px solid var(--ink);box-shadow:10px 11px 0 rgba(0,9,62,.14)}
+.cc-cup{left:624px;top:312px;width:400px;height:742px;z-index:3;transform:rotate(-5deg);transform-origin:50% 90%}
+.cc-cup svg{width:100%;height:100%;display:block;overflow:visible}
+.cc-sway{position:absolute;inset:0;transform-origin:50% 92%}
+/* sleeve wordmark is HTML, not SVG text: Chrome mis-paints SVG text inside animated groups */
+.cc-sleeve{position:absolute;left:0;width:400px;top:503px;text-align:center;font-family:"Anton",sans-serif;font-size:55px;
+  line-height:1;letter-spacing:1px;color:#fff;white-space:nowrap}
+.cc-sleeve b{font-weight:400;color:var(--gold)}
+
+/* info */
+.cc-date{left:56px;top:600px;width:350px;padding:26px 30px 28px;background:var(--ink);color:var(--ecru);
+  border:3px solid var(--ink);border-radius:20px;box-shadow:10px 11px 0 rgba(0,9,62,.2);z-index:6;--r:-2.5deg;transform:rotate(var(--r))}
+.cc-date .k{font-size:24px;font-weight:800;letter-spacing:.26em;color:var(--gold)}
+.cc-date .d{font-family:"Anton",sans-serif;font-size:132px;line-height:.9;color:#fff;margin-top:8px;white-space:nowrap}
+.cc-date .t{font-size:40px;font-weight:800;letter-spacing:.1em;line-height:1;color:var(--lav-t);margin-top:14px;white-space:nowrap}
+.cc-pts{left:388px;top:560px;width:178px;height:178px;border-radius:50%;background:var(--gold);border:3px solid var(--ink);
+  box-shadow:7px 8px 0 rgba(0,9,62,.2);z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  --r:9deg;transform:rotate(var(--r))}
+.cc-pts .e{font-size:15px;font-weight:800;letter-spacing:.24em;color:var(--lav2)}
+.cc-pts .n{font-family:"Anton",sans-serif;font-size:86px;line-height:.92;color:var(--ink)}
+.cc-pts .p{font-family:"Anton",sans-serif;font-size:26px;letter-spacing:.06em;color:var(--ink)}
+.cc-loc{left:56px;top:888px;display:flex;align-items:center;gap:20px;padding:22px 30px 24px 22px;background:var(--card);
+  border:3px solid var(--ink);border-radius:20px;box-shadow:10px 11px 0 rgba(0,9,62,.16);z-index:6;--r:1.4deg;transform:rotate(var(--r))}
+.cc-pin{width:74px;height:74px;border-radius:50%;background:var(--lav);border:3px solid var(--ink);flex:none;
+  display:flex;align-items:center;justify-content:center}
+.cc-loc .n{font-family:"Anton",sans-serif;font-size:50px;line-height:1;color:var(--ink);text-transform:uppercase;white-space:nowrap}
+.cc-loc .a{font-size:25px;font-weight:700;color:var(--navy);margin-top:7px;white-space:nowrap}
+
+/* ticker band */
+.cc-band{left:-80px;top:1064px;width:1240px;height:84px;z-index:2;transform:rotate(-2.5deg)}
+.cc-band-in{position:absolute;inset:0;background:var(--ink);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);
+  overflow:hidden;display:flex;align-items:center}
+.cc-track{display:flex;white-space:nowrap;will-change:transform}
+.cc-track span{font-family:"Anton",sans-serif;font-size:42px;line-height:1;color:var(--ecru);letter-spacing:.04em;
+  text-transform:uppercase;padding-right:28px;display:inline-flex;align-items:center;gap:28px}
+.cc-track i{font-style:normal;color:var(--lav)}
+.cc-track i.g{color:var(--gold)}
+
+/* footer */
+.cc-tag{left:56px;top:1186px;font-size:46px;line-height:1.05;color:var(--ink);z-index:5}
+.cc-tag em{color:var(--lav2)}
+.cc-hand{left:58px;top:1262px;font-size:22px;font-weight:800;letter-spacing:.22em;color:var(--navy2);z-index:5}
+.cc-affil{right:20px;bottom:20px;padding:8px 9px;background:#fff;border:2.5px solid var(--ink);border-radius:10px;
+  box-shadow:5px 6px 0 rgba(0,9,62,.22);z-index:8}
+.cc-affil img{display:block;width:112px;height:auto}
+
+.cc-bean{z-index:6;width:48px;height:62px}
+.cc-bean > div{width:100%;height:100%}
+.cc-bean svg{width:100%;height:100%;display:block}
+.cc-spark{z-index:6}
+
+/* ===================== motion ===================== */
+@keyframes cc-rise{0%{transform:translateY(62%);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes cc-reveal{from{clip-path:inset(-30% 100% -30% -12%)}to{clip-path:inset(-30% -12% -30% -12%)}}
+@keyframes cc-draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes cc-pop{0%{transform:scale(.35) rotate(calc(var(--r,0deg) - 14deg));opacity:0}
+  65%{transform:scale(1.07) rotate(var(--r,0deg));opacity:1}100%{transform:scale(1) rotate(var(--r,0deg));opacity:1}}
+@keyframes cc-spinpop{0%{transform:scale(0) rotate(-200deg)}70%{transform:scale(1.12) rotate(calc(var(--r) + 6deg))}100%{transform:scale(1) rotate(var(--r))}}
+@keyframes cc-cupin{0%{transform:translateY(240px) rotate(-16deg);opacity:0}45%{opacity:1}
+  62%{transform:translateY(-18px) rotate(-2deg)}80%{transform:translateY(5px) rotate(-6.5deg)}100%{transform:translateY(0) rotate(-5deg);opacity:1}}
+@keyframes cc-sway{0%,100%{transform:rotate(0)}50%{transform:rotate(2deg)}}
+@keyframes cc-steam{0%{stroke-dashoffset:100;opacity:0;transform:translateY(26px)}18%{opacity:.85}
+  65%{opacity:.6}100%{stroke-dashoffset:-100;opacity:0;transform:translateY(-34px)}}
+@keyframes cc-grow{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes cc-spin{to{transform:rotate(360deg)}}
+@keyframes cc-slide{from{transform:translateX(-115%)}to{transform:none}}
+@keyframes cc-marq{to{transform:translateX(-50%)}}
+@keyframes cc-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(14deg)}}
+@keyframes cc-fadeup{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes cc-twinkle{0%,100%{transform:scale(.55) rotate(0);opacity:.35}50%{transform:scale(1) rotate(45deg);opacity:1}}
+
+.cc-play .cc-blob{animation:cc-grow .9s cubic-bezier(.2,1,.3,1) both}
+.cc-play .cc-l{animation:cc-rise .72s cubic-bezier(.2,1.45,.38,1) both;animation-delay:calc(.12s + var(--i) * .07s)}
+.cc-play .cc-chat{animation:cc-reveal .85s cubic-bezier(.65,0,.25,1) .62s both}
+.cc-play .cc-swash path{animation:cc-draw .65s cubic-bezier(.65,0,.25,1) 1.25s both}
+.cc-play .cc-badge{animation:cc-pop .6s cubic-bezier(.2,1.3,.4,1) .5s both}
+.cc-play .cc-badge .spin{transform-origin:100px 100px;animation:cc-spin 16s linear infinite}
+.cc-play .cc-sun{animation:cc-grow .8s cubic-bezier(.2,1.35,.4,1) .3s both}
+.cc-play .cc-cup{animation:cc-cupin 1.15s cubic-bezier(.3,.9,.3,1) .42s both}
+.cc-play .cc-sway{animation:cc-sway 5.5s ease-in-out 1.7s infinite}
+.cc-play .cc-steam path{animation:cc-steam 3.3s ease-in-out infinite both}
+.cc-play .cc-steam path:nth-child(1){animation-delay:1.35s}
+.cc-play .cc-steam path:nth-child(2){animation-delay:2.25s}
+.cc-play .cc-steam path:nth-child(3){animation-delay:3.05s}
+.cc-play .cc-date{animation:cc-pop .62s cubic-bezier(.2,1.3,.4,1) 1.0s both}
+.cc-play .cc-loc{animation:cc-pop .62s cubic-bezier(.2,1.3,.4,1) 1.2s both}
+.cc-play .cc-pts{animation:cc-spinpop .8s cubic-bezier(.2,1.2,.4,1) 1.42s both}
+.cc-play .cc-band-in{animation:cc-slide .9s cubic-bezier(.65,0,.25,1) .25s both}
+.cc-play .cc-track{animation:cc-marq 20s linear infinite}
+.cc-play .cc-bean{animation:cc-pop .5s cubic-bezier(.2,1.4,.4,1) both}
+.cc-play .cc-bean > div{animation:cc-float 4.6s ease-in-out infinite}
+.cc-play .cc-bean:nth-of-type(odd) > div{animation-duration:5.4s;animation-direction:reverse}
+.cc-play .cc-tag,.cc-play .cc-hand{animation:cc-fadeup .6s cubic-bezier(.2,1,.3,1) 1.7s both}
+.cc-play .cc-hand{animation-delay:1.82s}
+.cc-play .cc-affil{animation:cc-fadeup .6s cubic-bezier(.2,1,.3,1) 1.95s both}
+.cc-play .cc-hdr{animation:cc-fadeup .55s cubic-bezier(.2,1,.3,1) .05s both}
+.cc-play .cc-spark svg{animation:cc-twinkle 2.6s ease-in-out infinite}
+
+/* hold everything at frame 0 until the flyer is on screen */
+.cc-flyer.cc-play:not(.cc-run) .cc-art *{animation-play-state:paused !important}
+@media (prefers-reduced-motion: reduce){.cc-flyer .cc-art *{animation:none !important}}
+
+/* ── Events: featured "up next" event with the animated flyer ── */
+.ev-feat{display:grid;grid-template-columns:minmax(0,440px) 1fr;gap:60px;align-items:center;margin-bottom:72px}
+.ev-feat .cc-flyer{max-width:440px}
+.ev-feat-txt h3{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:clamp(36px,4.6vw,60px);
+  line-height:.98;color:var(--ink-deep);margin-bottom:24px}
+.ev-feat-txt h3 em{font-family:var(--serif);font-style:italic;font-weight:600;text-transform:none;color:#8A6FD0}
+.ev-feat-list{list-style:none;display:grid;gap:14px;margin-bottom:22px}
+.ev-feat-list li{display:flex;align-items:center;gap:14px;font-size:17px;font-weight:700;color:var(--ink)}
+.ev-feat-list svg{width:22px;height:22px;color:var(--blue);flex:none}
+.ev-feat-txt p{color:var(--muted);font-size:16px;font-weight:500;max-width:46ch;margin-bottom:28px}
+.ev-feat-ctas{display:flex;gap:12px;flex-wrap:wrap}
+@media (max-width:1060px){.ev-feat{grid-template-columns:1fr;gap:40px}.ev-feat .cc-flyer{max-width:520px;margin:0 auto}}
+</style>
 </head>
 <body>
 
@@ -1065,6 +1231,155 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
         <h2 class="h2 rv" style="--d:.08s">Show up. <span class="serif-i gold">Level up.</span></h2>
         <p class="lead rv" style="--d:.16s">Every event earns points toward Active and Premium membership. Scan the QR at the door and you're counted.</p>
         <p class="note-hand rv" style="--d:.22s;margin-top:14px">flyers fresh off the wall — <span class="u">tap one</span> ↓</p>
+      </div>
+      <!-- ── featured: Coffee Chat at Lift (animated flyer from SHRM-CoffeeChat/coffee-chat.html) ── -->
+      <div class="ev-feat">
+        <div class="ev-feat-art">
+<div class="cc-flyer" role="img" aria-label="SHRM at VCU Coffee Chat. Sunday, October 18, 12 to 2 PM, at Lift Coffee Shop, 218 West Broad Street, Richmond. Earn 3 points.">
+ <div class="cc-art">
+  <!-- scenery -->
+  <div class="cc-blob" style="left:760px;top:-210px;width:520px;height:430px;background:var(--powder);opacity:.38;border-radius:52% 48% 60% 40%/58% 42% 58% 42%;transform-origin:80% 20%"></div>
+  <div class="cc-blob" style="left:-190px;top:1120px;width:560px;height:420px;background:var(--lav-t);opacity:.75;border-radius:56% 44% 48% 52%/46% 56% 44% 54%;transform-origin:20% 80%"></div>
+  <div class="cc-wash"></div>
+  <div class="cc-dots" style="left:640px;top:420px;width:170px;height:150px;opacity:.6;background-image:radial-gradient(var(--powder) 3px,transparent 3.1px)"></div>
+  <div class="cc-dots" style="left:36px;top:1000px;width:150px;height:60px;opacity:.6;background-image:radial-gradient(var(--gold2) 3px,transparent 3.1px)"></div>
+
+  <!-- header -->
+  <div class="cc-hdr"><div class="cc-wm">SHRM<b>@</b>VCU</div><div class="cc-chip">Member social</div></div>
+
+  <!-- rotating date badge -->
+  <div class="cc-badge">
+    <svg viewBox="0 0 200 200">
+      <defs><path id="cc-ring" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1-152 0"/></defs>
+      <circle cx="100" cy="100" r="97" fill="#00093E"/>
+      <g class="spin">
+        <text font-family="Manrope, sans-serif" font-weight="800" font-size="16.4" letter-spacing="2.74" fill="#F1ECE1">
+          <textPath href="#cc-ring">COFFEE CHAT ✦ OCT 18 ✦ LIFT COFFEE SHOP ✦ </textPath>
+        </text>
+      </g>
+      <circle cx="100" cy="100" r="47" fill="#FBB533" stroke="#F1ECE1" stroke-width="3"/>
+      <g transform="translate(100 100) rotate(28)">
+        <ellipse rx="17" ry="24" fill="#00093E"/>
+        <path d="M0 -21C-9 -9 9 6 0 21" stroke="#FBB533" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- title -->
+  <div class="cc-anton cc-coffee" aria-hidden="true"><span class="cc-l" style="--i:0">C</span><span class="cc-l" style="--i:1">O</span><span class="cc-l" style="--i:2">F</span><span class="cc-l" style="--i:3">F</span><span class="cc-l" style="--i:4">E</span><span class="cc-l" style="--i:5">E</span></div>
+  <div class="cc-serif cc-chat" aria-hidden="true">chat.</div>
+  <svg class="cc-swash" viewBox="0 0 400 60" fill="none" aria-hidden="true">
+    <path d="M6 38C70 14 120 52 190 30S318 12 394 34" stroke="#FBB533" stroke-width="11" stroke-linecap="round" pathLength="100" stroke-dasharray="100"/>
+  </svg>
+
+  <!-- cup on a gold sun -->
+  <div class="cc-sun"></div>
+  <div class="cc-cup" aria-hidden="true">
+   <div class="cc-sway">
+   <svg viewBox="0 -240 420 780">
+    <g>
+     <g class="cc-steam" fill="none" stroke="#265D93" stroke-width="10" stroke-linecap="round">
+       <path d="M168 10C134 -36 206 -70 170 -118S138 -190 178 -226" pathLength="100" stroke-dasharray="100"/>
+       <path d="M216 4C186 -40 252 -82 220 -130S196 -186 228 -214" pathLength="100" stroke-dasharray="100" stroke="#9A7FD6"/>
+       <path d="M262 14C236 -24 292 -60 262 -100S246 -150 270 -176" pathLength="100" stroke-dasharray="100"/>
+     </g>
+     <!-- shadow -->
+     <ellipse cx="212" cy="546" rx="140" ry="16" fill="rgba(0,9,62,.18)"/>
+     <!-- body -->
+     <path d="M54 112H366L322 528Q320 540 306 540H114Q100 540 98 528Z" fill="#FBFDFF" stroke="#00093E" stroke-width="7" stroke-linejoin="round"/>
+     <path d="M86 140L118 506" stroke="rgba(121,173,216,.45)" stroke-width="16" stroke-linecap="round"/>
+     <!-- sleeve -->
+     <path d="M67 236H353L333 412H87Z" fill="#9A7FD6" stroke="#00093E" stroke-width="7" stroke-linejoin="round"/>
+     <path d="M118 372H302" stroke="#F1ECE1" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
+     <!-- lid -->
+     <path d="M78 66Q84 30 116 28H304Q336 30 342 66Z" fill="#1B3C69" stroke="#00093E" stroke-width="7" stroke-linejoin="round"/>
+     <rect x="34" y="62" width="352" height="54" rx="20" fill="#265D93" stroke="#00093E" stroke-width="7"/>
+     <rect x="168" y="38" width="52" height="12" rx="6" fill="#00093E"/>
+     <path d="M60 82H360" stroke="rgba(255,255,255,.25)" stroke-width="6" stroke-linecap="round"/>
+    </g>
+   </svg>
+   <div class="cc-sleeve">SHRM<b>@</b>VCU</div>
+   </div>
+  </div>
+
+  <!-- date -->
+  <div class="cc-date">
+    <div class="k">SUNDAY</div>
+    <div class="d">OCT 18</div>
+    <div class="t">12&ndash;2 PM</div>
+  </div>
+  <!-- points -->
+  <div class="cc-pts"><div class="e">EARN</div><div class="n">+3</div><div class="p">POINTS</div></div>
+  <!-- location -->
+  <div class="cc-loc">
+    <div class="cc-pin"><svg width="38" height="38" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#00093E" stroke-width="1.6" stroke-linejoin="round"><path d="M12 22s7-7.1 7-12.2A7 7 0 0 0 5 9.8C5 14.9 12 22 12 22Z"/><circle cx="12" cy="9.6" r="2.6" fill="#00093E" stroke="none"/></svg></div>
+    <div><div class="n">Lift Coffee Shop</div><div class="a">218 W Broad St &middot; Richmond</div></div>
+  </div>
+
+  <!-- ticker -->
+  <div class="cc-band"><div class="cc-band-in"><div class="cc-track">
+    <span>Grab a coffee <i>&#10022;</i> Meet the chapter <i class="g">&#10022;</i> Earn 3 points <i>&#10022;</i> Get a lift <i class="g">&#10022;</i></span>
+    <span>Grab a coffee <i>&#10022;</i> Meet the chapter <i class="g">&#10022;</i> Earn 3 points <i>&#10022;</i> Get a lift <i class="g">&#10022;</i></span>
+    <span>Grab a coffee <i>&#10022;</i> Meet the chapter <i class="g">&#10022;</i> Earn 3 points <i>&#10022;</i> Get a lift <i class="g">&#10022;</i></span>
+    <span>Grab a coffee <i>&#10022;</i> Meet the chapter <i class="g">&#10022;</i> Earn 3 points <i>&#10022;</i> Get a lift <i class="g">&#10022;</i></span>
+  </div></div></div>
+
+  <!-- beans + sparkles -->
+  <div class="cc-bean" style="left:972px;top:470px;animation-delay:1.5s"><div><svg viewBox="0 0 48 62"><ellipse cx="24" cy="31" rx="20" ry="27" fill="#00093E"/><path d="M24 8C14 22 34 40 24 54" stroke="#9A7FD6" stroke-width="4.5" fill="none" stroke-linecap="round"/></svg></div></div>
+  <div class="cc-bean" style="left:574px;top:1000px;width:40px;height:52px;animation-delay:1.65s"><div><svg viewBox="0 0 48 62"><ellipse cx="24" cy="31" rx="20" ry="27" fill="#1B3C69"/><path d="M24 8C14 22 34 40 24 54" stroke="#FBB533" stroke-width="4.5" fill="none" stroke-linecap="round"/></svg></div></div>
+  <div class="cc-bean" style="left:642px;top:356px;width:38px;height:50px;animation-delay:1.8s"><div><svg viewBox="0 0 48 62"><ellipse cx="24" cy="31" rx="20" ry="27" fill="#1B3C69"/><path d="M24 8C14 22 34 40 24 54" stroke="#9A7FD6" stroke-width="4.5" fill="none" stroke-linecap="round"/></svg></div></div>
+  <div class="cc-spark" style="left:520px;top:470px"><svg width="46" height="46" viewBox="0 0 24 24" fill="#FBB533" stroke="#00093E" stroke-width="1.2" stroke-linejoin="round"><path d="M12 1.5 14.6 9.4 22.5 12 14.6 14.6 12 22.5 9.4 14.6 1.5 12 9.4 9.4Z"/></svg></div>
+  <div class="cc-spark" style="left:1000px;top:700px"><svg width="34" height="34" viewBox="0 0 24 24" fill="#CDBDF2" stroke="#00093E" stroke-width="1.4" stroke-linejoin="round" style="animation-delay:.9s"><path d="M12 1.5 14.6 9.4 22.5 12 14.6 14.6 12 22.5 9.4 14.6 1.5 12 9.4 9.4Z"/></svg></div>
+
+  <!-- footer -->
+  <div class="cc-serif cc-tag">A little <em>lift</em> for your network.</div>
+  <div class="cc-hand">@SHRM.VCU &nbsp;&middot;&nbsp; VCUSHRM.SITE</div>
+  <div class="cc-affil"><img src="assets/shrm-affiliate-logo.png" alt="Affiliate of SHRM"></div>
+
+  <svg class="cc-noise" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <filter id="cc-nz"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <rect width="100%" height="100%" filter="url(#cc-nz)"/>
+  </svg>
+ </div>
+</div>
+<script>
+/* scale the 1080px artboard to the flyer's width; play the entrance when it scrolls into view; click replays */
+(function(){
+  document.querySelectorAll('.cc-flyer').forEach(function(f){
+    function fit(){ f.style.setProperty('--cc-s', f.clientWidth / 1080); }
+    fit();
+    if ('ResizeObserver' in window) new ResizeObserver(fit).observe(f); else window.addEventListener('resize', fit);
+    window.addEventListener('load', fit); window.addEventListener('hashchange', function(){ setTimeout(fit, 0); });
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    f.classList.add('cc-play');
+    function run(){ f.classList.add('cc-run'); }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if (e.isIntersecting) { run(); io.disconnect(); } });
+      }, { threshold: .35 });
+      io.observe(f);
+    } else run();
+    f.addEventListener('click', function(){
+      f.classList.remove('cc-play', 'cc-run'); void f.offsetWidth; f.classList.add('cc-play', 'cc-run');
+    });
+  });
+})();
+</script>
+        </div>
+        <div class="ev-feat-txt">
+          <div class="eyebrow"><span class="idx">✦</span>Up next</div>
+          <h3>Coffee Chat <em>at Lift</em></h3>
+          <ul class="ev-feat-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Sunday, Oct 18 &middot; 12&ndash;2 PM</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Lift Coffee Shop &middot; 218 W Broad St, Richmond</li>
+            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>+3 points toward membership</li>
+          </ul>
+          <p>Grab a coffee, meet the chapter, and get a little lift for your network.</p>
+          <div class="ev-feat-ctas">
+            <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Lift+Coffee+Shop+218+W+Broad+St+Richmond+VA+23220" target="_blank" rel="noopener">Get directions<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="btn btn-ghost" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=SHRM%40VCU+Coffee+Chat+at+Lift&amp;dates=20261018T160000Z/20261018T180000Z&amp;location=Lift+Coffee+Shop%2C+218+W+Broad+St%2C+Richmond%2C+VA+23220&amp;details=Grab+a+coffee+and+meet+the+chapter.+Coffee+chats+earn+3+points.+vcushrm.site" target="_blank" rel="noopener">Add to Google Calendar</a>
+          </div>
+        </div>
       </div>
       <div class="ev-grid" id="ev-grid"><!-- events injected by JS from the EVENTS config --></div>
       <div class="ev-note rv">
@@ -1569,6 +1884,7 @@ const TYPES = {
 
 const EVENTS = [
   /* loc:"" hides the location line everywhere it renders */
+  { id:"ev-lift-oct18", title:"Coffee Chat at Lift", type:"coffee", day:"18", mon:"Oct", time:"12:00-2:00 PM", loc:"Lift Coffee Shop, 218 W Broad St", guests:false, desc:"Grab a coffee and meet the chapter. Sunday, noon to 2." },
   { id:"ev-interest", title:"Interest Meeting", type:"interest", day:"22", mon:"Sep", time:"6:30-8:00 PM", loc:"", guests:true, desc:"New here? Start here. Meet the e-board, hear the plan for the semester." },
   /* ← EDIT ME: fill in the real title / time / location for Sept 22 */
   { id:"ev-sep22",  title:"September Chapter Event",  type:"general", day:"22", mon:"Sep", time:"Time TBA", loc:"Location TBA", guests:true,  desc:"Details dropping soon — watch @shrm.vcu for the announcement." },
