@@ -612,6 +612,8 @@ section{position:relative;scroll-margin-top:104px}
 .tm.open-seat .avatar{background:var(--paper-2);color:var(--muted);font-size:24px;box-shadow:none}
 .tm.open-seat .role{color:var(--melon)}
 .tm.open-seat p{color:var(--muted);font-size:13.5px;margin-top:10px}
+.tm .mini-btn{margin-top:18px}
+[data-until][hidden]{display:none!important}
 .advisors{display:flex;gap:20px;flex-wrap:wrap;margin-top:64px;align-items:center}
 .advisors .lbl{font-family:var(--hand);font-size:12px;color:var(--navy-mid)}
 .adv{display:flex;align-items:center;gap:13px;border:2px solid var(--bd);border-radius:999px;padding:8px 22px 8px 9px;background:var(--card);box-shadow:var(--hard-sm);transition:transform .3s}
@@ -1402,13 +1404,22 @@ footer::before{content:"";position:absolute;inset:0;background:var(--pattern);ba
         <h2 class="h2 rv" style="--d:.08s">Led by students,<br><span class="serif-i gold">for students.</span></h2>
         <p class="note-hand rv" style="--d:.16s;margin-top:10px">the people keeping the lights on ✦</p>
       </div>
+      <!-- E-BOARD APPLICATIONS: everything with data-until disappears on that date -->
+      <div class="ev-note rv" data-until="2026-10-31" style="margin:0 0 44px">
+        <p><b>e-board applications are open!</b><br>We're hiring a Fundraising Chair and a Marketing Chair. Applications are due <strong>Friday, October 30</strong>. Sign in with your VCU Google account to apply.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-gold" href="https://forms.gle/16zcZwSgtX5G8Def9" target="_blank" rel="noopener">Fundraising Chair <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          <a class="btn btn-gold" href="https://forms.gle/GDfSQcLFY2fwMHZ57" target="_blank" rel="noopener">Marketing Chair <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+        </div>
+      </div>
       <!-- TEAM CARDS: edit names/roles here -->
       <div class="team-grid">
         <article class="tm rv"><div class="avatar"><span>DB</span></div><h3>Dylan Baker</h3><div class="role">President</div></article>
         <article class="tm rv" style="--d:.1s"><div class="avatar av-g2"><span>CM</span></div><h3>Cooper Meidinger</h3><div class="role">Vice President</div></article>
         <article class="tm rv" style="--d:.2s"><div class="avatar av-g3"><span>BL</span></div><h3>Blasia Layne</h3><div class="role">Treasurer</div></article>
-        <article class="tm open-seat rv"><div class="avatar"><span>?</span></div><h3>Open Seat</h3><div class="role">Engagement Chair</div><p>Love bringing people together? This could be you — ask us how to get involved.</p></article>
-        <article class="tm open-seat rv" style="--d:.1s"><div class="avatar"><span>?</span></div><h3>Open Seat</h3><div class="role">Marketing Chair</div><p>Run the socials. Make us famous.</p></article>
+        <article class="tm open-seat rv"><div class="avatar"><span>?</span></div><h3>Open Seat</h3><div class="role">Fundraising Chair</div><p>Plan the fundraisers that keep the chapter running.</p><a class="mini-btn" data-until="2026-10-31" href="https://forms.gle/16zcZwSgtX5G8Def9" target="_blank" rel="noopener">Apply by Oct 30 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a></article>
+        <article class="tm open-seat rv" style="--d:.1s"><div class="avatar"><span>?</span></div><h3>Open Seat</h3><div class="role">Marketing Chair</div><p>Run the socials. Make us famous.</p><a class="mini-btn" data-until="2026-10-31" href="https://forms.gle/GDfSQcLFY2fwMHZ57" target="_blank" rel="noopener">Apply by Oct 30 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a></article>
+        <article class="tm open-seat rv" style="--d:.2s"><div class="avatar"><span>?</span></div><h3>Open Seat</h3><div class="role">Engagement Chair</div><p>Love bringing people together? This could be you — ask us how to get involved.</p></article>
       </div>
       <div class="advisors rv">
         <span class="lbl">chapter advisors —</span>
@@ -2559,6 +2570,7 @@ function confetti(){
 }
 
 /* ════════════════════════════ INIT ════════════════════════════ */
+$$("[data-until]").forEach(el => { if (new Date() >= new Date(el.dataset.until + "T00:00:00")) el.hidden = true; });
 if (INSTANT) {
   const st = document.createElement("style");
   st.textContent = "*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1!important;transform:none!important;filter:none!important}#loader{display:none!important}#hero{min-height:860px!important;padding-top:120px!important}.page-head{padding-top:140px!important}";
